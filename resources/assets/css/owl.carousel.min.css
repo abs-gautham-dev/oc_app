@@ -1,0 +1,135 @@
+/* 
+ * 	Core Owl Carousel CSS File
+ *	v1.3.3
+ */
+
+/* clearfix */
+.owl-carousel .owl-wrapper:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+/* display none until init */
+.owl-carousel{
+	display: none;
+	position: relative;
+	width: 100%;
+	-ms-touch-action: pan-y;
+}
+.owl-carousel .owl-wrapper{
+	display: none;
+	position: relative;
+	-webkit-transform: translate3d(0px, 0px, 0px);
+}
+.owl-carousel .owl-wrapper-outer{
+	overflow: hidden;
+	position: relative;
+	width: 100%;
+}
+.owl-carousel .owl-wrapper-outer.autoHeight{
+	-webkit-transition: height 500ms ease-in-out;
+	-moz-transition: height 500ms ease-in-out;
+	-ms-transition: height 500ms ease-in-out;
+	-o-transition: height 500ms ease-in-out;
+	transition: height 500ms ease-in-out;
+}
+	
+.owl-carousel .owl-item{
+	float: left;
+}
+.owl-controls .owl-page,
+.owl-controls .owl-buttons div{
+	cursor: pointer;
+}
+.owl-controls {
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+/* mouse grab icon */
+.grabbing { 
+    cursor:url(grabbing.png) 8 8, move;
+}
+
+/* fix */
+.owl-carousel  .owl-wrapper,
+.owl-carousel  .owl-item{
+	-webkit-backface-visibility: hidden;
+	-moz-backface-visibility:    hidden;
+	-ms-backface-visibility:     hidden;
+  -webkit-transform: translate3d(0,0,0);
+  -moz-transform: translate3d(0,0,0);
+  -ms-transform: translate3d(0,0,0);
+}
+
+
+.owl-controls {
+  top: 0;
+  position: relative;
+  width: 100%;
+}
+.owl-controls.clickable {
+  cursor: default;
+}
+.owl-controls .owl-dots,
+.owl-controls .owl-pagination {
+  margin-bottom: 0;
+  text-align: center;
+  padding-top: 0;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}
+.owl-controls .owl-dots .owl-dot,
+.owl-controls .owl-pagination .owl-dot,
+.owl-controls .owl-dots .owl-page,
+.owl-controls .owl-pagination .owl-page {
+  padding: 9px;
+  display: inline-block;
+  cursor: pointer;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}
+.owl-controls .owl-dots .owl-dot span,
+.owl-controls .owl-pagination .owl-dot span,
+.owl-controls .owl-dots .owl-page span,
+.owl-controls .owl-pagination .owl-page span {
+  width: 10px;
+  height: 10px;
+  display: block;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  background-color: #fff;
+}
+.owl-controls .owl-dots .owl-dot.active,
+.owl-controls .owl-pagination .owl-dot.active,
+.owl-controls .owl-dots .owl-page.active,
+.owl-controls .owl-pagination .owl-page.active {
+  cursor: default;
+}
+.owl-controls .owl-dots .owl-dot.active span,
+.owl-controls .owl-pagination .owl-dot.active span,
+.owl-controls .owl-dots .owl-page.active span,
+.owl-controls .owl-pagination .owl-page.active span {
+  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50);
+  filter: alpha(opacity=50);
+  -moz-opacity: 0.5;
+  -khtml-opacity: 0.5;
+  opacity: 0.5;
+}
+

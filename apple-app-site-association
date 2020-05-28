@@ -1,0 +1,20 @@
+{
+    "webcredentials": {
+        "apps": [
+            "T92FYSK66U.com.app.follup"
+        ]
+    },
+    "applinks": {
+        "apps": [
+            "T92FYSK66U.com.app.follup"
+        ],
+        "details": [
+            {
+                "appID": "T92FYSK66U.com.app.follup",
+                "paths": [
+                    "*"
+                ]
+            }
+        ]
+    }
+}

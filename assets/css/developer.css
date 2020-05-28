@@ -1,0 +1,75 @@
+.error{
+	color: #ff0000;
+	font-weight: 400;
+}
+
+.parsley-required {
+	color: red !important;
+	font-size: 14px; 
+	list-style: none;
+	margin-left:0px; 
+}
+.parsley-errors-list {
+	color: red !important;
+	font-size: 14px; 
+	list-style: none;
+	margin-left:0px; 
+	padding-left:0px;
+}
+
+.square { 
+	width: 15px; 
+	height: 15px; 
+	vertical-align: middle;
+	border:1px solid #ccc;
+}
+
+.inline { 
+	display: inline-block; 
+	margin-right:10px;
+}
+
+.pointer {
+  	cursor: pointer;
+}
+
+.select2-container--default .select2-selection--multiple {
+	border-radius:0px !important;
+	border-color:#d2d6de !important;
+}
+
+.select2-container .select2-search--inline .select2-search__field {
+  padding-left: 10px !important;
+}
+
+.v-align-middle {
+	vertical-align:middle;
+}
+
+p.inputerror{
+	margin: 4px 0!important;
+	color:red;
+}
+p.input{
+	margin: 4px 0!important;
+}
+p.input .alert-danger{
+	padding: 0px !important;
+}
+
+.padding0 {
+	padding:0;
+}
+
+.box-header .alert {
+	margin-bottom: 0;
+}
+
+.table-bordered td {
+	vertical-align:middle !important;
+}
+
+.badge {
+	margin:0;
+}
+
