@@ -62,6 +62,11 @@
                     <i class="fa fa-map"></i> <span>Job Locations</span> 
                 </a>
             </li> 
+            <li class="treeview">
+                <a href="<?php echo base_url(); ?>admin/booking/list/">
+                    <i class="fa fa-map"></i> <span>Bookings</span> 
+                </a>
+            </li> 
             <?php if($user_type=='Super Admin'){?>  
             <li class="treeview">
                 <a href="<?php echo base_url(); ?>admin/notification"> 

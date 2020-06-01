@@ -2419,6 +2419,19 @@ public function getChatlisting($sender_id,$receiver_id)
 		return $query->result();
 
     }
+    public function booking_join(){
+    	$this->db->select('b.*,u.user_type,u.full_name,u.email');
+
+        $this->db->from('booking_request b');
+
+        $this->db->join('users u','b.company_id = u.user_id');
+
+        $this->db->where('u.user_type','Companies');
+
+        $query = $this->db->get();
+
+        return $query->result_array();
+    }
 
 
 }
