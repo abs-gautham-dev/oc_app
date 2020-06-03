@@ -1,10 +1,5 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-require('vendor/autoload.php');
-
-use Twilio\Rest\Client;
-// require_once(APPPATH.'libraries/Stripe/init.php');
-// require_once(APPPATH.'libraries/Stripe/lib/Stripe.php');
 class App extends CI_Controller {
 	 private $language;
 
@@ -33,7 +28,7 @@ class App extends CI_Controller {
 		}
         if(APP_KEY !== $h_key['Apikey'])  //check header key for authorizetion 
 		{
-			echo json_encode(array('data'=> array('status' =>'0' ,'msg'=>"Error Invalid Api Key")));
+			echo json_encode(array('data'=> array('status' =>'0' ,'message'=>"Error Invalid Api Key")));
 			header('HTTP/1.0 401 Unauthorized');
 			die;
 		}
@@ -52,7 +47,7 @@ class App extends CI_Controller {
 			$this->language = 'english';	
 		}
 
-		// $err = array('data'=> array('status'=>'0','msg'=>$h_key));
+		// $err = array('data'=> array('status'=>'0','message'=>$h_key));
 		// 		echo json_encode($err);exit; 
 		// echo $this->language ;die;
 		
@@ -67,7 +62,7 @@ class App extends CI_Controller {
 		 
 		  if(preg_match('/[^a-z_\-0-9.]/i',$username))
 			{
-				$err = array('data'=> array('status'=>'0','msg'=>'Please use combination of Alphabets or underscore or point '.' to enter username.'));
+				$err = array('data'=> array('status'=>'0','message'=>'Please use combination of Alphabets or underscore or point '.' to enter username.'));
 				echo json_encode($err);exit; 
 			} 
 
@@ -75,7 +70,7 @@ class App extends CI_Controller {
 
 		}else
 		{
-			$err = array('data'=> array('status'=>'0','msg'=>'Please use combination of Alphabets or underscore or point '.' to enter username.'));
+			$err = array('data'=> array('status'=>'0','message'=>'Please use combination of Alphabets or underscore or point '.' to enter username.'));
 			echo json_encode($err);exit;  
 		}
 		
@@ -89,13 +84,13 @@ class App extends CI_Controller {
 		{  		
 			 if(preg_match('/[^a-z_\-0-9.]/i',$username))
 			{
-				$err = array('data'=> array('status'=>'0','msg'=>'Please use combination of Alphabets or underscore or point '.' to enter username.'));
+				$err = array('data'=> array('status'=>'0','message'=>'Please use combination of Alphabets or underscore or point '.' to enter username.'));
 				echo json_encode($err);exit; 
 			} 	
 		 
 		}else
 		{
-			$err = array('data'=> array('status'=>'0','msg'=>'Please use combination of Alphabets or underscore or point '.' to enter username.'));
+			$err = array('data'=> array('status'=>'0','message'=>'Please use combination of Alphabets or underscore or point '.' to enter username.'));
 			echo json_encode($err);exit;  
 		}
 		
@@ -125,11 +120,11 @@ class App extends CI_Controller {
         $mobile_auth_token   =	$this->input->post('mobile_auth_token');
        
 		if(empty($user_id )) {
-			$err = array('data'=> array('status'=>'0','msg'=>'Please enter the User Id.'));
+			$err =array('status'=>'0','message'=>'Please enter the User Id.');
 			echo json_encode($err);exit;
 		}
 		if(empty($mobile_auth_token )) {
-			$err = array('data'=> array('status'=>'0','msg'=>'Please enter mobile_auth_token.'));
+			$err = array('status'=>'0','message'=>'Please enter mobile_auth_token.');
 			echo json_encode($err);exit;
 		}
 		$where = array('user_id' => $user_id);
@@ -149,21 +144,21 @@ class App extends CI_Controller {
 		$this->Common_model->addEditRecords('users',array('is_verified'=>1),array('user_id'=>$user_id));
 		if(empty($resuser))
     	{
-    		$err = array('data'=> array('status'=>'4','msg'=>'Oops! Logged in is not found. Please if you can try Logging again.'));
+    		$err = array('status'=>'4','message'=>'Oops! Logged in is not found. Please if you can try Logging again.');
 			echo json_encode($err);
 			exit;
     	}
 
     	if($resuser['is_deleted']=='1')
     	{
-    		$err = array('data'=> array('status'=>'4','msg'=>'Sorry, Logged in user is deleted. Please try Logging again.'));
+    		$err = array('status'=>'4','message'=>'Sorry, Logged in user is deleted. Please try Logging again.');
 			echo json_encode($err);
 			exit;
     	}
 
     	if($resuser['mobile_auth_token']!=$mobile_auth_token)
     	{
-    		$err = array('data'=> array('status'=>'4','msg'=>'You are logged in other devices that\'s you logout from here.'));
+    		$err = array('status'=>'4','message'=>'You are logged in other devices that\'s you logout from here.');
 			echo json_encode($err);
 			exit;
     	}
@@ -178,11 +173,11 @@ class App extends CI_Controller {
         $code   =	$this->input->post('code');
        
 		if(empty($user_id )) {
-			$err = array('data'=> array('status'=>'0','msg'=>'Please enter user_id.'));
+			$err = array('data'=> array('status'=>'0','message'=>'Please enter user_id.'));
 			echo json_encode($err);exit;
 		}
 		if(empty($code )) {
-			$err = array('data'=> array('status'=>'0','msg'=>'Please enter code.'));
+			$err = array('data'=> array('status'=>'0','message'=>'Please enter code.'));
 			echo json_encode($err);exit;
 		}
 			$where = array('user_id' => $user_id);
@@ -197,13 +192,13 @@ class App extends CI_Controller {
 
 		    			if($code == $res['token']){
 			    			if($this->Common_model->addEditRecords('users',array('is_verified'=>1,'token'=>''),array('user_id'=>$res['user_id']))) {
-			    				$err = array('data'=> array('status'=>'1','msg'=>'Mobile Number Verified Successfully.')) ;
+			    				$err = array('data'=> array('status'=>'1','message'=>'Mobile Number Verified Successfully.')) ;
 								echo json_encode($err);
 								exit;
 			    			}
 		    			}else{
 
-		    				$err = array('data'=> array('status'=>'2','msg'=>'Verification Code Not Match.')) ;
+		    				$err = array('data'=> array('status'=>'2','message'=>'Verification Code Not Match.')) ;
 							echo json_encode($err);
 							exit;
 
@@ -211,7 +206,7 @@ class App extends CI_Controller {
 		    		}
 		    	}else{
 
-		    		$err = array('data'=> array('status'=>'2','msg'=>'Already Verified.')) ;
+		    		$err = array('data'=> array('status'=>'2','message'=>'Already Verified.')) ;
 					echo json_encode($err);
 
 		    	}
@@ -267,11 +262,11 @@ class App extends CI_Controller {
        
 		 if(empty($device_type))
 			{
-				$err = array('data'=> array('status'=>'0','msg'=>'Please enter device type!'));
+				$err =  array('status'=>'0','message'=>'Please enter device type!');
 				echo json_encode($err);
 				exit;
 			}else if($device_type !='Android' && $device_type !='IOS' ){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Device type must be either Android or IOS'));
+			$err =  array('status' => '0', 'message' => 'Device type must be either Android or IOS');
 			echo json_encode($err); exit;
 		    }
 
@@ -279,19 +274,15 @@ class App extends CI_Controller {
 		 
 		    if(empty($email))
 			{
-				$err = array('data'=> array('status'=>'0','msg'=>'Please enter the email / phone number.'));
+				$err =  array('status'=>'0','message'=>'Please enter the email.');
 				echo json_encode($err);
 				exit;
 			}
 
-			// if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
-			// 	$err = array('data' =>array('status' => '0', 'msg' => 'Please enter a valid email.'));
-			// 	echo json_encode($err); exit;
-			// }
 
 			if(empty($password))
 			{
-				$err = array('data'=> array('status'=>'0','msg'=>'Please enter the Password.'));
+				$err =  array('status'=>'0','message'=>'Please enter the Password.');
 				echo json_encode($err);
 				exit;
 			}
@@ -299,7 +290,7 @@ class App extends CI_Controller {
 			
 		   if(empty($device_type))
 			{
-				$err = array('data'=> array('status'=>'0','msg'=>'Please enter device type!'));
+				$err =  array('status'=>'0','message'=>'Please enter device type!');
 				echo json_encode($err);
 				exit;
 			}
@@ -313,22 +304,11 @@ class App extends CI_Controller {
 		    {
 		    	if($res['status']=="Inactive")
 		    	{
-		    		$err = array('data'=> array('status'=>'0','msg'=>'Your profile is Inactive, Please contact us.'));
+		    		$err =  array('status'=>'0','message'=>'Your account is Inactive, Please contact us.');
 					echo json_encode($err);
 					exit;
 		    	}
 
-		    	if($res['is_verified']==0){
-		    		$code = $this->sendotp($res['mobile']);
-		    		if(!empty($code)){
-
-		    			if($this->Common_model->addEditRecords('users',array('token'=>$code),array('user_id'=>$res['user_id']))) {
-		    				$err = array('data'=> array('status'=>'2','msg'=>'Verification code has been sent to your phone number.')) ;
-							echo json_encode($err);
-							exit;
-		    			}
-		    		}
-		    	}
 
 		    	$where=array('user_id'=>$res['user_id']);
 		    	$date = date('Y-m-d H:i:s');
@@ -337,193 +317,22 @@ class App extends CI_Controller {
 				if($resdevice=$this->Common_model->addEditRecords('users',$update_data,array('user_id'=>$res['user_id']))) {
 
 					$res=$this->Common_model->getRecords($tableName,'*',$where,'',true);
-					$commission=$this->Common_model->getRecords('admin','dr_price,patient_price','','',true);
-					if($res['user_type']=='doctor'){
-						$res['membership_price'] = $commission['dr_price'];
-					}else{
-						$res['membership_price'] = $commission['patient_price'];
-					}			
-
-
-							$country_name =  $this->Common_model->getRecords('countries','name',array('id'=>$res['country_id']),'',true);
-
-				    		$res['country_name'] =$country_name['name'];
-				    		$state_name =  $this->Common_model->getRecords('states','name',array('id'=>$res['state_id']),'',true);
-				    		$res['state_name'] =$state_name['name'];
-				    		$city_name =  $this->Common_model->getRecords('cities','name',array('id'=>$res['city_id']),'',true);
-				    		$res['city_name'] =$city_name['name'];	
-				    		$category_name =  $this->Common_model->getRecords('categories','name',array('category_id'=>$res['category_id']),'',true);
-				    		$res['category_name'] =$category_name['name'];
-	
-
-					if($this->language=='english'){
-						$response = array('data'=> array('status'=>'1','msg'=>'Login Successfully','details'=>$res));		
-					}elseif ($this->language=='arabic') {
-						$response = array('data'=> array('status'=>'1','msg'=>' تم الدخول'  ,'details'=>$res));
-					}elseif ($this->language=='french') {
-						$response = array('data'=> array('status'=>'1','msg'=>'Connexion réussie','details'=>$res));	
-					}
-
+					
+					$response =  array('status'=>'1','message'=>'Login Successfully','details'=>$res);		
 					
 				  	echo json_encode($response);
 				  	exit;	
 			    } else {
-			    	$err = array('data' =>array('status' => '0', 'msg' => 'Some error occured Please try again !!'));
+			    	$err =  array('status' => '0', 'message' => 'Some error occured Please try again !!');
 					echo json_encode($err);
 					exit;
 			    }
+			}else{
+
+				$err =  array('status' => '0', 'message' => 'Incorrect email or password');
+				echo json_encode($err);
 			}
-			else
-			{
-
-				$where = array('mobile' => $email,'password' => $password);
-				$res=$this->Common_model->getRecords($tableName,'*',$where,'',true);
-			  	if(!empty($res))  
-			    {
-			    	if($res['status']=="Inactive")
-			    	{
-			    		$err = array('data'=> array('status'=>'0','msg'=>'Your profile is Inactive, Please contact us.'));
-						echo json_encode($err);
-						exit;
-			    	}
-
-			    	if($res['is_verified']==0){
-			    		$code = $this->sendotp($res['mobile']);
-			    		if(!empty($code)){
-
-			    			if($this->Common_model->addEditRecords('users',array('token'=>$code),array('user_id'=>$res['user_id']))) {
-			    				$err = array('data'=> array('status'=>'2','msg'=>'Verification code has been sent to your phone number.'));
-								echo json_encode($err);
-								exit;
-			    			}
-			    		}
-		    		}
-
-			    	$where=array('user_id'=>$res['user_id']);
-			    	$date = date('Y-m-d H:i:s');
-			    	$mobile_auth_token = base64_encode(rand());
-		          	$update_data = array('device_id'=>$device_id,'device_type'=>$device_type,'created'=>$date,'mobile_auth_token'=>$mobile_auth_token);
-					if($resdevice=$this->Common_model->addEditRecords('users',$update_data,array('user_id'=>$res['user_id']))) {
-
-						$res=$this->Common_model->getRecords($tableName,'*',$where,'',true);
-						$commission=$this->Common_model->getRecords('admin','dr_price,patient_price','','',true);
-						if($res['user_type']=='doctor'){
-							$res['membership_price'] = $commission['dr_price'];
-						}else{
-							$res['membership_price'] = $commission['patient_price'];
-						}
-
-
-
-
-						$country_name =  $this->Common_model->getRecords('countries','name',array('id'=>$res['country_id']),'',true);
-
-			    		$res['country_name'] =$country_name['name'];
-			    		$state_name =  $this->Common_model->getRecords('states','name',array('id'=>$res['state_id']),'',true);
-			    		$res['state_name'] =$state_name['name'];
-			    		$city_name =  $this->Common_model->getRecords('cities','name',array('id'=>$res['city_id']),'',true);
-			    		$res['city_name'] =$city_name['name'];	
-			    		$category_name =  $this->Common_model->getRecords('categories','name',array('category_id'=>$res['category_id']),'',true);
-			    		$res['category_name'] =$category_name['name'];
-
-
-
-						if($this->language=='english'){
-							$response = array('data'=> array('status'=>'1','msg'=>'Login Successfully','details'=>$res));		
-						}elseif ($this->language=='arabic') {
-							$response = array('data'=> array('status'=>'1','msg'=>' تم الدخول'  ,'details'=>$res));
-						}elseif ($this->language=='french') {
-							$response = array('data'=> array('status'=>'1','msg'=>'Connexion réussie','details'=>$res));	
-						}
-					  	echo json_encode($response);
-					  	exit;	
-				    } else {
-				    	$err = array('data' =>array('status' => '0', 'msg' => 'Some error occured Please try again !!'));
-						echo json_encode($err);
-						exit;
-				    }
-				}
-				else
-				{
-
-					$where = array('mobile2' => $email,'password' => $password);
-					$res=$this->Common_model->getRecords($tableName,'*',$where,'',true);
-					   if(!empty($res))  
-					    {
-					    	if($res['status']=="Inactive")
-					    	{
-					    		$err = array('data'=> array('status'=>'0','msg'=>'Your profile is Inactive, Please contact us.'));
-								echo json_encode($err);
-								exit;
-					    	}
-
-					    	if($res['is_verified']==0){
-					    		$code = $this->sendotp($res['mobile']);
-					    		if(!empty($code)){
-
-					    			if($this->Common_model->addEditRecords('users',array('token'=>$code),array('user_id'=>$res['user_id']))) {
-					    				$err = array('data'=> array('status'=>'2','msg'=>'Verification code has been sent to your phone number.'));
-										echo json_encode($err);
-										exit;
-					    			}
-					    		}
-					    	}
-
-					    	$where=array('user_id'=>$res['user_id']);
-					    	$date = date('Y-m-d H:i:s');
-					    	$mobile_auth_token = base64_encode(rand());
-				          	$update_data = array('device_id'=>$device_id,'device_type'=>$device_type,'created'=>$date,'mobile_auth_token'=>$mobile_auth_token);
-							if($resdevice=$this->Common_model->addEditRecords('users',$update_data,array('user_id'=>$res['user_id']))) {
-
-								$res=$this->Common_model->getRecords($tableName,'*',$where,'',true);
-								$commission=$this->Common_model->getRecords('admin','dr_price,patient_price','','',true);
-								if($res['user_type']=='doctor'){
-									$res['membership_price'] = $commission['dr_price'];
-								}else{
-									$res['membership_price'] = $commission['patient_price'];
-								}
-
-
-
-
-								$country_name =  $this->Common_model->getRecords('countries','name',array('id'=>$res['country_id']),'',true);
-
-					    		$res['country_name'] =$country_name['name'];
-					    		$state_name =  $this->Common_model->getRecords('states','name',array('id'=>$res['state_id']),'',true);
-					    		$res['state_name'] =$state_name['name'];
-					    		$city_name =  $this->Common_model->getRecords('cities','name',array('id'=>$res['city_id']),'',true);
-					    		$res['city_name'] =$city_name['name'];	
-					    		$category_name =  $this->Common_model->getRecords('categories','name',array('category_id'=>$res['category_id']),'',true);
-					    		$res['category_name'] =$category_name['name'];
-
-
-
-								if($this->language=='english'){
-									$response = array('data'=> array('status'=>'1','msg'=>'Login Successfully','details'=>$res));		
-								}elseif ($this->language=='arabic') {
-									$response = array('data'=> array('status'=>'1','msg'=>' تم الدخول'  ,'details'=>$res));
-								}elseif ($this->language=='french') {
-									$response = array('data'=> array('status'=>'1','msg'=>'Connexion réussie','details'=>$res));	
-								}
-							  	echo json_encode($response);
-							  	exit;	
-						    } else {
-						    	$err = array('data' =>array('status' => '0', 'msg' => 'Some error occured Please try again !!'));
-								echo json_encode($err);
-								exit;
-						    }
-						}
-						else
-						{
-
-							$where = array('email' => $email,'password' => $password);
-							$res=$this->Common_model->getRecords($tableName,'*',$where,'',true);
-
-							$err = array('data' =>array('status' => '0', 'msg' => 'Incorrect email/mobile or password'));
-							echo json_encode($err);
-						}
-				}
-			}
+			
 	    
 	} 
 
@@ -536,29 +345,26 @@ class App extends CI_Controller {
       
 		if(empty($user_id))
 		{
-			$err = array('data'=> array('status'=>'0','msg'=>'Please enter user id '));
+			$err = array('data'=> array('status'=>'0','message'=>'Please enter user id '));
 			echo json_encode($err);
 			exit;
 		}
 		if(empty($device_id))
 		{
-			$err = array('data'=> array('status'=>'0','msg'=>'Please enter device id '));
+			$err = array('data'=> array('status'=>'0','message'=>'Please enter device id '));
 			echo json_encode($err);
 			exit;
 		}
 
-		// $this->Common_model->addEditRecords('users_chat',array('on_call'=>0),array('sender_id'=>$user_id));
-		// $this->Common_model->addEditRecords('users_chat',array('on_call'=>0),array('receiver_id'=>$user_id));
-
-       
+    
        	$this->Common_model->addEditRecords('users',array('device_id'=>''),array('user_id'=>$user_id));
 
        	if($this->language=='english'){
-       		$response = array('data'=> array('status'=>'4','msg'=>'Logout successful.'));
+       		$response = array('data'=> array('status'=>'4','message'=>'Logout successful.'));
 		}elseif ($this->language=='arabic') {
-			$response = array('data'=> array('status'=>'4','msg'=>'تم الخروج بنجاح‎'  ));
+			$response = array('data'=> array('status'=>'4','message'=>'تم الخروج بنجاح‎'  ));
 		}elseif ($this->language=='french') {
-			$response = array('data'=> array('status'=>'4','msg'=>'déconnexion réussie'));
+			$response = array('data'=> array('status'=>'4','message'=>'déconnexion réussie'));
 		} 
 
 		  	echo json_encode($response);	
@@ -575,123 +381,80 @@ class App extends CI_Controller {
 	  	$full_name			=	$this->test_input($this->input->post('full_name'));
 	  	$email				=	$this->test_input($this->input->post('email'));
 	  	$password			=	$this->test_input($this->input->post('password'));
-	  	$country_id			=	$this->test_input($this->input->post('country_id'));
-	  	$state_id			=	$this->test_input($this->input->post('state_id'));
-	  	$city_id			=	$this->test_input($this->input->post('city_id'));
 	  	$mobile			=	$this->test_input($this->input->post('mobile'));
-	  	$mobile2			=	$this->test_input($this->input->post('mobile2'));
 	  	$address			=	$this->test_input($this->input->post('address'));
-	  	$latitude			=	$this->test_input($this->input->post('latitude'));
-	  	$longitude			=	$this->test_input($this->input->post('longitude'));
-	  	$about			=	$this->test_input($this->input->post('about'));
+	  	$pincode			=	$this->test_input($this->input->post('pincode'));
 	  	$device_id			=	$this->test_input($this->input->post('device_id'));
 	  	$device_type		=	$this->input->post('device_type');
-	  	$category_id		=	$this->input->post('category_id');
 
 
 		if(empty($user_type)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please select user type.'));
+			$err = array('status' => '0', 'message' => 'Please select user type.');
 			echo json_encode($err); exit;
 		}else
 		{
-			if($user_type!='doctor' && $user_type!='patient')
+			if($user_type!='Sales' && $user_type!='Companies' && $user_type!='Inspectors')
 			{
-				$err = array('data' =>array('status' => '0', 'msg' => 'User type must be doctor or patient.'));
+				$err = array('status' => '0', 'message' => 'User type must be Sales or Companies Or Inspectors.');
 				echo json_encode($err); exit;	
-			}elseif($user_type=='doctor' && empty($category_id))
-			{
-				$err = array('data' =>array('status' => '0', 'msg' => 'Please select category.'));
-				echo json_encode($err); exit;
 			}
 		} 
 
-		if($user_type=='patient')
-		{
-			$category_id='';
-		}
 
 		if(empty($full_name)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter full_name.'));
+			$err = array('status' => '0', 'message' => 'Please enter full_name.');
 			echo json_encode($err); exit;
 		} 
 		
-		// if(empty($email)){
-		// 	$err = array('data' =>array('status' => '0', 'msg' => 'Please enter your email.'));
-		// 	echo json_encode($err); exit;
-		// } 
 		if(empty($email)){
-			$email = '';
+			$err = array('status' => '0', 'message' => 'Please enter your email.');
+			echo json_encode($err); exit;
 		}else{
 
-				if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
-					$err = array('data' =>array('status' => '0', 'msg' => 'Please enter a valid email.'));
-					echo json_encode($err); exit;
-				}
-		        $where1 = array('email' => $email,'is_deleted'=>0);
-				if($this->Common_model->getRecords('users','user_id',$where1,'',true)) {
-					$err = array('data' =>array('status' => '0', 'msg' => 'An account already exist with similar Email ID. Please try login with another.'));
-					echo json_encode($err); exit;
-				} 
+			if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+				$err = array('status' => '0', 'message' => 'Please enter a valid email.');
+				echo json_encode($err); exit;
+			}
+	        $where1 = array('email' => $email,'is_deleted'=>0);
+			if($this->Common_model->getRecords('users','user_id',$where1,'',true)) {
+				$err = array('status' => '0', 'message' => 'An account already exist with similar Email ID. Please try login with another.');
+				echo json_encode($err); exit;
+			} 
 		} 
-
-		if(empty($country_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter country.'));
-			echo json_encode($err); exit;
-		} 
-
-		if(empty($state_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter state.'));
-			echo json_encode($err); exit;
-		} 
-
-		if(empty($city_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter city.'));
-			echo json_encode($err); exit;
-		} 
+	
 		if(empty($mobile)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter mobile.'));
+			$err = array('status' => '0', 'message' => 'Please enter mobile.');
 			echo json_encode($err); exit;
 		}else{
 
 			$mobile = str_replace('-','',$mobile);
-
 			   $where1 = array('mobile' => $mobile,'is_deleted'=>0);
 				if($this->Common_model->getRecords('users','user_id',$where1,'',true)) {
-					$err = array('data' =>array('status' => '0', 'msg' => 'An account already exist with similar Mobile number. Please try login with another.'));
+					$err = array('status' => '0', 'message' => 'An account already exist with similar Mobile number. Please try login with another.');
 					echo json_encode($err); exit;
 				}  
 		} 
-
-		if(empty($latitude)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter latitude.'));
-			echo json_encode($err); exit;
-		}
-		if(empty($longitude)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter longitude.'));
-			echo json_encode($err); exit;
-		}
-		if(empty($mobile2)){
-			$mobile2 ='';
-		}  
-
-	
  
 		if(empty($password)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter your password.'));
+			$err = array('status' => '0', 'message' => 'Please enter your password.');
+			echo json_encode($err); exit;
+		} 
+		if(empty($pincode)){
+			$err = array('status' => '0', 'message' => 'Please enter your pincode.');
 			echo json_encode($err); exit;
 		} 
  
 		
 		if(empty($device_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter device id'));
+			$err = array('status' => '0', 'message' => 'Please enter device id');
 			echo json_encode($err); exit;
 		} 
 		if(empty($device_type)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter device type'));
+			$err = array('status' => '0', 'message' => 'Please enter device type');
 			echo json_encode($err); exit;
 		} 
 		else if($device_type !='Android' && $device_type !='IOS' ){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Device type must be either Andriod or IOS'));
+			$err = array('status' => '0', 'message' => 'Device type must be either Andriod or IOS');
 			echo json_encode($err); exit;
 		}
 	 
@@ -709,9 +472,9 @@ class App extends CI_Controller {
 			$config['allowed_types'] = '*';
             $this->load->library('upload', $config);
 			$this->upload->initialize($config);
-			if (!$this->upload->do_upload('profile_pic')) 
+			if (!$this->upload->do_upload('profile_pic'))
 			{
-				$err = array('data' =>array('status' => '0', 'msg' =>strip_tags($this->upload->display_errors())));
+				$err = array('status' => '0', 'message' =>strip_tags($this->upload->display_errors()));
 	            echo json_encode($err); exit; 		
 			}
 			else
@@ -724,34 +487,27 @@ class App extends CI_Controller {
         	$imagess = 'l60Hf.png';
         }
 
-
-        $code = $this->sendotp($mobile);
-		 
+ 
 
         $mobile_auth_token = base64_encode(rand());
 	    $insert_data = array( 
 	    	'user_type'=>$user_type,
 	    	'full_name'=>$full_name,
 	    	'email' => $email, 
-	    	'token'=>$code,
 	    	'password' => $password,
-	    	'country_id' => $country_id,
-	    	'state_id' => $state_id,
-	    	'city_id' => $city_id,
 	    	'mobile' => $mobile,
-	    	'mobile2' => $mobile2,
-	    	'payment_status' => 'Paid',
 	    	'profile_pic' =>$imagess,
 	    	'address' => $address,
-	    	'latitude' => $latitude,
-	    	'longitude' => $longitude,
-	    	'about' => $about,
+	    	'zipcode' => $pincode,
 	    	'mobile_auth_token' => $mobile_auth_token,
 	    	'device_id'=>$device_id,
-	    	'category_id'=>$category_id,
 	    	'device_type'=>$device_type, 
 	    	'created'=>date('Y-m-d h:i:s'),
 	    );
+
+	    if($user_type=='Inspectors'){
+	    	$insert_data['status']= 'Inactive';
+	    }
 		
 		if($user_id = $this->Common_model->addEditRecords('users',$insert_data)) {
 	
@@ -764,41 +520,21 @@ class App extends CI_Controller {
 				$data['message'] = 'You have been registered successfully.';
 				$body = $this->load->view('template/common', $data,TRUE);
 				$to_email = $email;
-				$from_email = 'info@follup.online'; 
+				$from_email = 'info@officechecker'; 
 				$this->Common_model->setMailConfig();
  
 		 
 			//Send mail 
-		 	$this->Common_model->sendEmail($to_email,$subject,$body,$from_email); 
+		 		//$this->Common_model->sendEmail($to_email,$subject,$body,$from_email); 
 		 	}
 
 				$user_data = $this->Common_model->getRecords('users','*',array('user_id'=>$user_id),'',true);
-
-				$country_name =  $this->Common_model->getRecords('countries','name',array('id'=>$user_data['country_id']),'',true);
-
-	    		$user_data['country_name'] =$country_name['name'];
-	    		$state_name =  $this->Common_model->getRecords('states','name',array('id'=>$user_data['state_id']),'',true);
-	    		$user_data['state_name'] =$state_name['name'];
-	    		$city_name =  $this->Common_model->getRecords('cities','name',array('id'=>$user_data['city_id']),'',true);
-	    		$user_data['city_name'] =$city_name['name'];	
-	    		$category_name =  $this->Common_model->getRecords('categories','name',array('category_id'=>$user_data['category_id']),'',true);
-	    		$user_data['category_name'] =$category_name['name'];
  
+					$response = array('status'=>'1','message'=>'Signup Successfully','details'=>$user_data);
 
-				if($this->language=='english'){
-					$response = array('data'=> array('status'=>'2','msg'=>'Signup Successfully','details'=>$user_data));
-
-				}elseif ($this->language=='arabic') {
-					$response = array('data'=> array('status'=>'2','msg'=>'تم التسجيل بنجاح  ','details'=>$user_data));
-
-				}elseif ($this->language=='french') {
-					$response = array('data'=> array('status'=>'2','msg'=>'inscription réussie','details'=>$user_data));
-
-				} 
-					
 				    echo json_encode($response); exit;
 			} else {
-				$err = array('data' =>array('status' => '0', 'msg' => 'Server not responding. Please try again !!'));
+				$err = array('status' => '0', 'message' => 'Server not responding. Please try again !!');
 				echo json_encode($err); exit;
 			}
 	 
@@ -806,77 +542,250 @@ class App extends CI_Controller {
 
 
 
-	/*=============================Feedback===========================================*/
-	public function feedback()
-	{
-	  	// $username			=	$this->test_input($this->input->post('username'));
-	  	$user_id			=	$this->test_input($this->input->post('user_id'));
-	  	$doctor_id			=	$this->test_input($this->input->post('doctor_id'));
-	  	$question1			=	$this->test_input($this->input->post('question1'));
-	  	$question2			=	$this->test_input($this->input->post('question2'));
-	  	$question3			=	$this->test_input($this->input->post('question3')); 
-	  	$question4			=	$this->test_input($this->input->post('question4')); 
-	  	$question5			=	$this->test_input($this->input->post('question5')); 
-	  	$question6			=	$this->test_input($this->input->post('question6'));  
-	  	$question7			=	$this->test_input($this->input->post('question7'));  
-	  	$question8			=	$this->test_input($this->input->post('question8'));  
-	  	$question9			=	$this->test_input($this->input->post('question9'));  
-	  	$question10			=	$this->test_input($this->input->post('question10'));  
 
-		if(empty($doctor_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter doctor id.'));
-			echo json_encode($err); exit;
-		}
-		if(empty($question1) || empty($question2) || empty($question3) || empty($question4) || empty($question5) || empty($question6)  || empty($question7)  || empty($question8)  || empty($question9)  ){
 
-			if($this->language=='english'){
-				$err = array('data' =>array('status' => '0', 'msg' => 'Please awnser for all questions.'));
-			}elseif ($this->language=='arabic') {
-				$err = array('data' =>array('status' => '0', 'msg' => 'يرجى ملء جميع الأسئلة.'));
-			}elseif ($this->language=='french') {
-				$err = array('data' =>array('status' => '0', 'msg' => 'Veuillez répondre à toutes les questions.'));
-			}
- 
+    public function send_order() {
 
-			echo json_encode($err); exit;
-		}
- 
-	    $insert_data = array( 
-	    	'user_id'=>$user_id,
-	    	'dr_id'=>$doctor_id,
-	    	'question1'=>$question1,
-	    	'question2'=>$question2,
-	    	'question3'=>$question3,
-	    	'question4'=>$question4,
-	    	'question5'=>$question5,
-	    	'question6'=>$question6,
-	    	'question7'=>$question7,
-	    	'question8'=>$question8,
-	    	'question9'=>$question9,
-	    	'question10'=>$question10,
-	    	'created'=>date('Y-m-d h:i:s'),
-	    );
-		$dr_detail = $this->Common_model->getRecords('users','*',array('dr_id'=>$doctor_id),'',true);
-		$user_detail = $this->Common_model->getRecords('users','*',array('user_id'=>$user_id),'',true);
-		if($user_id = $this->Common_model->addEditRecords('feedback',$insert_data)) {
-	 
-			$data['message'] = 'Patient '.$user_detail['full_name'].' has left feedback for your doctor.';
-			$subject = SITE_TITLE.': Feedback received for doctor.';
-			$data['username']=$dr_detail['full_name'];
-			$body = $this->load->view('template/common', $data,TRUE);
-			$to_email = $dr_detail['email'];
-			$from_email = getAdminEmail(); 
-			$this->Common_model->setMailConfig();
-			$this->Common_model->sendEmail($to_email,$subject,$body,$from_email);
+       $this->check_login();
+       $user_id	=	$this->test_input($this->input->post('user_id'));
+       $contact_name	=	$this->test_input($this->input->post('contact_name'));
+       $address	=	$this->test_input($this->input->post('address'));
+       $email	=	$this->test_input($this->input->post('email'));
+       $term_and_condtion	=	$this->test_input($this->input->post('term_and_condtion'));
+       $company_id		=	$this->test_input($this->input->post('company_id'));
 
-			$response = array('data'=> array('status'=>'1','msg'=>'Feedback sent successfully.'));
-			    echo json_encode($response); exit;
-		} else {
-			$err = array('data' =>array('status' => '0', 'msg' => 'Server not responding. Please try again !!'));
+
+       if(empty($user_id)){
+			$err = array('status' => '0', 'message' => 'Please enter your user id.');
 			echo json_encode($err); exit;
 		} 
-	}
+       if(empty($contact_name)){
+			$err = array('status' => '0', 'message' => 'Please enter contact_name.');
+			echo json_encode($err); exit;
+		} 
+       if(empty($address)){
+			$err = array('status' => '0', 'message' => 'Please enter address.');
+			echo json_encode($err); exit;
+		} 
+       if(empty($email)){
+			$err = array('status' => '0', 'message' => 'Please enter email.');
+			echo json_encode($err); exit;
+		} 
+       	if(empty($company_id)){
+			$err = array('status' => '0', 'message' => 'Please enter company_id.');
+			echo json_encode($err); exit;
+		} 
+       	if(empty($term_and_condtion)){
+			$err = array('status' => '0', 'message' => 'Please enter term and condtion.');
+			echo json_encode($err); exit;
+		} 
 
+
+      		$update_data = array(
+                'sender_id'  =>  $user_id,
+                'contact_name'  =>  $contact_name,
+                'address'  =>  $address,
+                'email'  =>  $email,
+                'company_id'  =>  $company_id,
+                'agree_term_and_condition'  =>  $term_and_condtion,
+                'created'  =>  date("Y-m-d H:i:s"),
+		    ); 
+
+		    if(!$order_id = $this->Common_model->addEditRecords('sales_order', $update_data)) {
+			    $err = array('status' => '0', 'message' => 'Some error occured! Please try again.');
+	            echo json_encode($err); exit;
+			} else {
+
+
+					$second_user=$this->Common_model->getRecords('users','user_id,full_name,device_id,device_type,badge_count',array('user_id'=>$company_id),'',true);
+
+					// echo "<pre>";print_r($second_user);die;
+					$current_user=$this->Common_model->getRecords('users','full_name',array('user_id'=>$user_id),'',true);
+
+		  
+					      	$iosarray = array(
+			                    'alert' => 'Received Order Detail From ' .$current_user['full_name'],
+			                    'type'  => 'sales_order',
+			                    'order_id'  => $order_id,
+			                   	'badge' => $second_user['badge_count'],
+			                    'sound' => 'default',
+			                    'user_id' => $user_id,
+			       			);
+  
+							$andarray = array(
+				                'message'   => 'Received Order Detail From ' .$current_user['full_name'],
+				               	'type'  => 'sales_order',
+				               	'order_id'  =>$order_id,
+			                   	'user_id' => $user_id,
+				                'title'     => 'Received Order Detail From ' .$current_user['full_name'],
+			            	);
+							
+
+					    		if($second_user['device_type']=='Android'){
+									$referrer = androidNotification($second_user['device_id'],$andarray);
+								}
+
+					    		if($second_user['device_type']=='IOS'){
+
+			                   		 $referrer = iosNotification($second_user['device_id'],$iosarray);
+			                   		
+					    		}
+					    
+				 
+					    $add_data =array('user_id' => $second_user['user_id'],'order_id'=>$order_id,'created_by' =>$user_id,'type'=>'sales_order', 'notification_title'=> 'Received Order Detail From ' .$current_user['full_name'], 'notification_description'=>  'Received Order Detail From ' .$current_user['full_name'],'created'=>date('Y-m-d H:i:s'));
+			    		$this->Common_model->addEditRecords('notifications',$add_data); 
+
+				$suc = array('status' => '1', 'message' => 'Order Send Successfully.');
+	            echo json_encode($suc); exit;
+			} 
+
+    }  
+
+    public function send_job_request() {
+
+       $this->check_login();
+       $user_id	=	$this->test_input($this->input->post('user_id'));
+       $sales_order_id	=	$this->test_input($this->input->post('sales_order_id'));
+       $number_of_job	=	$this->test_input($this->input->post('number_of_job'));
+
+
+       if(empty($user_id)){
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter your user id.'));
+			echo json_encode($err); exit;
+		} 
+       if(empty($sales_order_id)){
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter order_id.'));
+			echo json_encode($err); exit;
+		} 
+       if(empty($number_of_job)){
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter number of job.'));
+			echo json_encode($err); exit;
+		} 
+
+
+      		$update_data = array(
+                'company_id'  =>  $user_id,
+                'number_of_job'  =>  $number_of_job,
+                'sales_order_id'  =>  $sales_order_id, 
+                'created'  =>  date("Y-m-d H:i:s"),
+		    ); 
+
+		    if(!$order_id = $this->Common_model->addEditRecords('booking_request', $update_data)) {
+			    $err = array('data' =>array('status' => '0', 'message' => 'Some error occured! Please try again.'));
+	            echo json_encode($err); exit;
+			} else {
+
+
+					// $second_user=$this->Common_model->getRecords('users','user_id,full_name,device_id,device_type,badge_count',array('user_id'=>$user_id),'',true);
+
+
+					// if(!empty($second_user['full_name'])) {
+					// 	$user_name = $second_user['full_name'];
+					// }
+					 
+					// $subject = SITE_TITLE." Received Job Request";
+				 
+					// $data['title']=  'Received Job Request';
+					// $data['username']= 'Admin';
+					// $data['message']= 'You Received A Job Request From '.$user_name;
+					// $body = $this->load->view('template/common', $data,TRUE);
+					// $to_email = 'parmar.jay350@gmail.com';
+					// $from_email = 'info@officechecker'; 
+					// $this->Common_model->setMailConfig();
+
+				 // 	//Send mail 
+					// if($this->Common_model->sendEmail($to_email,$subject,$body,$from_email)) 
+					// {
+
+						$suc = array('data' =>array('status' => '1', 'message' => 'Job Request Sent Successfully.'));
+			            echo json_encode($suc); exit;
+
+					// } else {
+					// 	$err = array('data' =>array('status' => '0', 'message' => 'Some error occured. Please try again !!.'));
+					// 	echo json_encode($err); exit;
+					// }
+
+			} 
+
+    }  
+    public function add_job() {
+       $this->check_login();
+       $user_id	=	$this->test_input($this->input->post('user_id'));
+       $name		=	$this->test_input($this->input->post('name'));
+       $address	=	$this->test_input($this->input->post('address'));
+       $post_code	=	$this->test_input($this->input->post('post_code'));
+       $phone_number	=	$this->test_input($this->input->post('phone_number'));
+       $comments	=	$this->test_input($this->input->post('comments'));
+
+
+       if(empty($user_id)){
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter your user id.'));
+			echo json_encode($err); exit;
+		} 
+       if(empty($name)){
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter name.'));
+			echo json_encode($err); exit;
+		} 
+       if(empty($address)){
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter address.'));
+			echo json_encode($err); exit;
+		} 
+       if(empty($post_code)){
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter post code.'));
+			echo json_encode($err); exit;
+		} 
+       if(empty($phone_number)){
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter phone number.'));
+			echo json_encode($err); exit;
+		} 
+
+
+		if($this->Common_model->getRecords('job_in_account','count',array('company_id'=>$user_id,'count >'=>0),'',true))
+      	{
+
+      		$old_job_id = $this->Common_model->getRecords('jobs','id','','id DESC',true);
+
+      		$job_number = str_pad($old_job_id['id']+1,5,"0",STR_PAD_LEFT );
+
+      		$update_data = array(
+                'user_id'  =>  $user_id,
+                'name'  =>  $name,
+                'address'  =>  $address,
+                'post_code'  =>  $post_code,
+                'job_number'  =>  $job_number,
+                'phone_number'  =>  $phone_number,
+                'comments'  =>  $comments,
+                'created'  =>  date("Y-m-d H:i:s"),
+		    ); 
+
+		    if(!$this->Common_model->addEditRecords('jobs', $update_data)) {
+			    $err = array('status' => '0', 'message' => 'Some error occured! Please try again.');
+	            echo json_encode($err); exit;
+			} else {
+
+				$old_job = $this->Common_model->getRecords('job_in_account','count',array('company_id'=>$user_id,'count >'=>0),'',true);
+				$number_of_job = 
+				$new_number = $old_job['count']-1;
+				$this->Common_model->addEditRecords('job_in_account',array('count'=>$new_number),array('company_id'=>$user_id));
+
+				$suc = array('status' => '1', 'message' => 'Job Create Successfully.');
+	            echo json_encode($suc); exit;
+			} 
+
+      	}else{
+      		$err = array('status' => '0', 'message' => 'You dont have pemission to post job please contact to sales team.');
+            echo json_encode($err); exit;
+      	}
+		    
+        
+	
+    }
+
+
+
+
+
+ 
 	public function payment_save()
 	{
 	  	// $username			=	$this->test_input($this->input->post('username'));
@@ -886,15 +795,15 @@ class App extends CI_Controller {
 	    
 		$this->check_login();
 		if(empty($user_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter user id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter user id.'));
 			echo json_encode($err); exit;
 		} 
 		if(empty($transaction_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter transaction id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter transaction id.'));
 			echo json_encode($err); exit;
 		} 
 		if(empty($amount)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter amount.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter amount.'));
 			echo json_encode($err); exit;
 		} 
 		
@@ -909,10 +818,10 @@ class App extends CI_Controller {
 		if( $this->Common_model->addEditRecords('payment_history',$insert_data)) {
 		
 			$this->Common_model->addEditRecords('users',array('payment_status'=>'Paid'),array('user_id'=>$user_id));
-			$response = array('data'=> array('status'=>'1','msg'=>'Payment received successfully'));
+			$response = array('data'=> array('status'=>'1','message'=>'Payment received successfully'));
 				    echo json_encode($response); exit;
 			} else {
-				$err = array('data' =>array('status' => '0', 'msg' => 'Server not responding. Please try again !!'));
+				$err = array('data' =>array('status' => '0', 'message' => 'Server not responding. Please try again !!'));
 				echo json_encode($err); exit;
 			}
 	 
@@ -937,64 +846,64 @@ class App extends CI_Controller {
 
 	 
 		if(empty($full_name)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter full_name.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter full_name.'));
 			echo json_encode($err); exit;
 		} 
 		if(empty($user_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter user id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter user id.'));
 			echo json_encode($err); exit;
 		} 
 
 		if($user_type!='doctor' && $user_type!='patient')
 		{
-			$err = array('data' =>array('status' => '0', 'msg' => 'User type must be doctor or patient.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'User type must be doctor or patient.'));
 			echo json_encode($err); exit;	
 		}elseif($user_type=='doctor' && empty($category_id))
 		{
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please select category.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please select category.'));
 			echo json_encode($err); exit;
 		}
 		
 		if(empty($email)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter your email.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter your email.'));
 			echo json_encode($err); exit;
 		} 
 
 		if(empty($country_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter country.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter country.'));
 			echo json_encode($err); exit;
 		} 
 
 		if(empty($state_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter state.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter state.'));
 			echo json_encode($err); exit;
 		} 
 
 		if(empty($city_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter city.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter city.'));
 			echo json_encode($err); exit;
 		} 
 		if(empty($mobile)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter mobile.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter mobile.'));
 			echo json_encode($err); exit;
 		} 
 
 		if(empty($latitude)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter latitude.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter latitude.'));
 			echo json_encode($err); exit;
 		}
 		if(empty($longitude)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter longitude.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter longitude.'));
 			echo json_encode($err); exit;
 		}  
 
 		if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter a valid email.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter a valid email.'));
 			echo json_encode($err); exit;
 		}
         $where1 = array('email' => $email,'user_id!='=>$user_id);
 		if($this->Common_model->getRecords('users','user_id',$where1,'',true)) {
-			$err = array('data' =>array('status' => '0', 'msg' => 'An account already exist with similar Email ID. Please try login with another.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'An account already exist with similar Email ID. Please try login with another.'));
 			echo json_encode($err); exit;
 		} 
   
@@ -1013,7 +922,7 @@ class App extends CI_Controller {
 			$this->upload->initialize($config);
 			if (!$this->upload->do_upload('profile_pic')) 
 			{
-				$err = array('data' =>array('status' => '0', 'msg' =>strip_tags($this->upload->display_errors())));
+				$err = array('data' =>array('status' => '0', 'message' =>strip_tags($this->upload->display_errors())));
 	            echo json_encode($err); exit; 		
 			}
 			else
@@ -1051,21 +960,21 @@ class App extends CI_Controller {
 
 				if($this->language=='english'){
 				 
-					$response = array('data'=> array('status'=>'1','msg'=>'Profile Update Successfully','details'=>$user_data));
+					$response = array('data'=> array('status'=>'1','message'=>'Profile Update Successfully','details'=>$user_data));
 
 				}elseif ($this->language=='arabic') {
 				 
-					$response = array('data'=> array('status'=>'1','msg'=>' تم تحديث الملف ', 'details'=>$user_data));
+					$response = array('data'=> array('status'=>'1','message'=>' تم تحديث الملف ', 'details'=>$user_data));
 
 				}elseif ($this->language=='french') {
 				 
-					$response = array('data'=> array('status'=>'1','msg'=>'Mise à jour du profil réussie','details'=>$user_data));
+					$response = array('data'=> array('status'=>'1','message'=>'Mise à jour du profil réussie','details'=>$user_data));
 
 				}
 
 				    echo json_encode($response); exit;
 			} else {
-				$err = array('data' =>array('status' => '0', 'msg' => 'Server not responding. Please try again !!'));
+				$err = array('data' =>array('status' => '0', 'message' => 'Server not responding. Please try again !!'));
 				echo json_encode($err); exit;
 			}
 	 
@@ -1075,9 +984,9 @@ class App extends CI_Controller {
 	
 		$data['countries'] = array();
 		if($data['countries']=getCountriesList()) {
-			$response = array('data'=> array('status'=>'1','msg'=>'Country list found' ,'details'=>$data['countries']));
+			$response = array('data'=> array('status'=>'1','message'=>'Country list found' ,'details'=>$data['countries']));
 		} else {
-			$response = array('data'=> array('status'=>'0','msg'=>'Countries not found.'));
+			$response = array('data'=> array('status'=>'0','message'=>'Countries not found.'));
 		}
 		echo json_encode($response);  exit;
 
@@ -1088,15 +997,15 @@ class App extends CI_Controller {
         $country_id	=	$this->test_input($this->input->post('country_id'));
 
         if(empty($country_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter country id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter country id.'));
 			echo json_encode($err); exit;
 		}
 
 		$data['states'] = array();
 		if($data['states']=getStatesList($country_id)) {
-			$response = array('data'=> array('status'=>'1','msg'=>'State found' ,'details'=>$data['states']));
+			$response = array('data'=> array('status'=>'1','message'=>'State found' ,'details'=>$data['states']));
 		} else {
-			$response = array('data'=> array('status'=>'0','msg'=>'states not found.'));
+			$response = array('data'=> array('status'=>'0','message'=>'states not found.'));
 		}
 		echo json_encode($response);  exit;
 
@@ -1107,15 +1016,15 @@ class App extends CI_Controller {
         $state_id	=	$this->test_input($this->input->post('state_id'));
 
         if(empty($state_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter state id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter state id.'));
 			echo json_encode($err); exit;
 		}
 
 		$data['cities'] = array();
 		if($data['cities']=getCitiesList($state_id)) {
-			$response = array('data'=> array('status'=>'1','msg'=>'City found' ,'details'=>$data['cities']));
+			$response = array('data'=> array('status'=>'1','message'=>'City found' ,'details'=>$data['cities']));
 		} else {
-			$response = array('data'=> array('status'=>'0','msg'=>'Cities not found.'));
+			$response = array('data'=> array('status'=>'0','message'=>'Cities not found.'));
 		}
 		echo json_encode($response);  exit;
 
@@ -1146,7 +1055,7 @@ class App extends CI_Controller {
 
 
 	// 	if(empty($username)){
-	// 		$err = array('data' =>array('status' => '0', 'msg' => 'Please enter username.'));
+	// 		$err = array('data' =>array('status' => '0', 'message' => 'Please enter username.'));
 	// 		echo json_encode($err); exit;
 	// 	}else
 	// 	{
@@ -1154,50 +1063,50 @@ class App extends CI_Controller {
 	// 	}
 
 	// 	if(empty($full_name)){
-	// 		$err = array('data' =>array('status' => '0', 'msg' => 'Please enter username.'));
+	// 		$err = array('data' =>array('status' => '0', 'message' => 'Please enter username.'));
 	// 		echo json_encode($err); exit;
 	// 	} 
 		
 	// 	if(empty($email)){
-	// 		$err = array('data' =>array('status' => '0', 'msg' => 'Please enter your email.'));
+	// 		$err = array('data' =>array('status' => '0', 'message' => 'Please enter your email.'));
 	// 		echo json_encode($err); exit;
 	// 	} 
 
 	// 	if(empty($user_id)){
-	// 		$err = array('data' =>array('status' => '0', 'msg' => 'Please enter your user id.'));
+	// 		$err = array('data' =>array('status' => '0', 'message' => 'Please enter your user id.'));
 	// 		echo json_encode($err); exit;
 	// 	} 
 
 	// 	if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
-	// 		$err = array('data' =>array('status' => '0', 'msg' => 'Please enter a valid email.'));
+	// 		$err = array('data' =>array('status' => '0', 'message' => 'Please enter a valid email.'));
 	// 		echo json_encode($err); exit;
 	// 	}
 
 	// 	if(user_username($user_id,$username)=='1') {
-	// 		$err = array('data' =>array('status' => '0', 'msg' => 'Username already used.'));
+	// 		$err = array('data' =>array('status' => '0', 'message' => 'Username already used.'));
 	// 		echo json_encode($err); exit;
 	// 	}
 
 	// 	$tableName1="business_page";
 	// 	$where = array('business_name' => $username);
 	// 	if($this->Common_model->getRecords($tableName1,'business_page_id',$where,'',true)) {
-	// 		$err = array('data' =>array('status' => '0', 'msg' => 'Username already used.'));
+	// 		$err = array('data' =>array('status' => '0', 'message' => 'Username already used.'));
 	// 		echo json_encode($err); exit;
 	// 	}
 
 	// 	if(user_email($user_id,$email)=='1') {
-	// 		$err = array('data' =>array('status' => '0', 'msg' => 'An account already exist with similar Email ID. Please try login with another.'));
+	// 		$err = array('data' =>array('status' => '0', 'message' => 'An account already exist with similar Email ID. Please try login with another.'));
 	// 		echo json_encode($err); exit;
 	// 	}
 
 	// 	if(firebase_email($user_id,$email)=='1') {
-	// 		$err = array('data' =>array('status' => '0', 'msg' => 'An account already exist with similar Email ID. Please try login with another.'));
+	// 		$err = array('data' =>array('status' => '0', 'message' => 'An account already exist with similar Email ID. Please try login with another.'));
 	// 		echo json_encode($err); exit;
 	// 	}
 
 	// 	if(!empty($mobile)) {
 	// 		if(user_mobile($user_id,$mobile)=='1') {
-	// 			$err = array('data' =>array('status' => '0', 'msg' => 'mobile already used.'));
+	// 			$err = array('data' =>array('status' => '0', 'message' => 'mobile already used.'));
 	// 			echo json_encode($err); exit;
 	// 		}
 	//     }
@@ -1271,7 +1180,7 @@ class App extends CI_Controller {
 	// 		$this->upload->initialize($config);
 	// 		if (!$this->upload->do_upload('profile_pic')) 
 	// 		{
-	// 			$err = array('data' =>array('status' => '0', 'msg' =>strip_tags($this->upload->display_errors())));
+	// 			$err = array('data' =>array('status' => '0', 'message' =>strip_tags($this->upload->display_errors())));
 	//             echo json_encode($err); exit; 		
 	// 		}
 	// 		else
@@ -1285,12 +1194,12 @@ class App extends CI_Controller {
        
 
 	// 	if(!$this->Common_model->addEditRecords('users',array_merge($a1,$a2),array('user_id'=>$user_id))) {
-	// 	    $err = array('data' =>array('status' => '0', 'msg' => 'Some error occured! Please try again.'));
+	// 	    $err = array('data' =>array('status' => '0', 'message' => 'Some error occured! Please try again.'));
  //            echo json_encode($err); exit;
 	// 	} else {
 	// 		$getPost =  	$this->App_model->getProfile($user_id);
  //        	$interested =  	$this->App_model->user_interested($user_id);
-	// 		$suc = array('data' =>array('status' => '1', 'msg' => 'Profile updated successfully.','details'=>$getPost,'interested'=>$interested));
+	// 		$suc = array('data' =>array('status' => '1', 'message' => 'Profile updated successfully.','details'=>$getPost,'interested'=>$interested));
  //            echo json_encode($suc); exit;
 	// 	}
 	// }
@@ -1359,10 +1268,10 @@ class App extends CI_Controller {
    	 	$data['profile_data'] =$getPost;
    	 	$data['interested'] =$interested;
         if($getPost){
-        	$response = array('data'=> array('status'=>'1','msg'=>'Profile','details'=>$data));
+        	$response = array('data'=> array('status'=>'1','message'=>'Profile','details'=>$data));
 			echo json_encode($response); exit;
 		} else {
-			$err = array('data' =>array('status' => '0', 'msg' => 'Record not found.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Record not found.'));
 			echo json_encode($err); exit;
 		}
 	} 
@@ -1409,10 +1318,10 @@ class App extends CI_Controller {
 	            $index++;
 	            
 			} 
-			$response = array('data'=> array('status'=>'1','msg'=>'PostList','details'=>$getPost));
+			$response = array('data'=> array('status'=>'1','message'=>'PostList','details'=>$getPost));
 			echo json_encode($response); exit;
 		} else {
-			$err = array('data' =>array('status' => '0', 'msg' => 'Result not found'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Result not found'));
 			echo json_encode($err); exit;	
 		}
  
@@ -1426,7 +1335,7 @@ class App extends CI_Controller {
        $user_id			=	$this->test_input($this->input->post('user_id')); 
 
        if(empty($user_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter your user id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter your user id.'));
 			echo json_encode($err); exit;
 		}   
 		$this->check_login();
@@ -1435,11 +1344,11 @@ class App extends CI_Controller {
             'modified' => date("Y-m-d H:i:s"),
 	    );
 		if(!$this->Common_model->addEditRecords('users', $update_data,array('user_id'=>$user_id))) {
-		    $err = array('data' =>array('status' => '0', 'msg' => 'Some error occured! Please try again.'));
+		    $err = array('data' =>array('status' => '0', 'message' => 'Some error occured! Please try again.'));
             echo json_encode($err); exit;
 		} else {
 			$notification = $this->Common_model->getRecords('notifications','*',array('user_id'=>$user_id),'notification_id Desc',false);
-			$suc = array('data' =>array('status' => '1', 'msg' => 'Notification list.','list'=>$notification));
+			$suc = array('data' =>array('status' => '1', 'message' => 'Notification list.','list'=>$notification));
             echo json_encode($suc); exit;
 		} 
     }
@@ -1449,16 +1358,16 @@ class App extends CI_Controller {
        $user_id			=	$this->test_input($this->input->post('user_id')); 
 
        if(empty($user_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter your user id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter your user id.'));
 			echo json_encode($err); exit;
 		}   
 		$this->check_login(); 
 			$advertisement = $this->Common_model->getRecords('advertisement','*',array('user_id'=>$user_id),'notification_id Desc',false);
 			if(!empty($advertisement )){
-				$suc = array('data' =>array('status' => '1', 'msg' => 'Advertisement list.','list'=>$advertisement));
+				$suc = array('data' =>array('status' => '1', 'message' => 'Advertisement list.','list'=>$advertisement));
             	echo json_encode($suc); exit;
 			}else{
-				$err = array('data' =>array('status' => '0', 'msg' => 'No record found.'));
+				$err = array('data' =>array('status' => '0', 'message' => 'No record found.'));
 				echo json_encode($err); exit;
 			} 	 
 		 
@@ -1470,15 +1379,15 @@ class App extends CI_Controller {
 
 
        if(empty($user_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter your user id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter your user id.'));
 			echo json_encode($err); exit;
 		} 
 
        if(empty($adv_notification)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter Adv Notification Type.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter Adv Notification Type.'));
 			echo json_encode($err); exit;
 		} else if($adv_notification != 'Yes' && $adv_notification != 'No') {
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter exact Adv Notification Type.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter exact Adv Notification Type.'));
 			echo json_encode($err); exit;
 		}
             
@@ -1487,10 +1396,10 @@ class App extends CI_Controller {
             'modified' => date("Y-m-d H:i:s"),
 	    );
 		if(!$this->Common_model->addEditRecords('users', $update_data,array('user_id'=>$user_id))) {
-		    $err = array('data' =>array('status' => '0', 'msg' => 'Some error occured! Please try again.'));
+		    $err = array('data' =>array('status' => '0', 'message' => 'Some error occured! Please try again.'));
             echo json_encode($err); exit;
 		} else {
-			$suc = array('data' =>array('status' => '1', 'msg' => 'Adv Notification updated successfully.'));
+			$suc = array('data' =>array('status' => '1', 'message' => 'Adv Notification updated successfully.'));
             echo json_encode($suc); exit;
 		} 
     }
@@ -1507,18 +1416,18 @@ class App extends CI_Controller {
 		$where = array('user_id' => $user_id);
 
 		if(empty($user_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please send user id'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please send user id'));
 			echo json_encode($err); exit;
 		}
 
 		if(empty($current_password)) {
-			$err = array('data'=> array('status'=>'0','msg'=>'Please enter current password'));
+			$err = array('data'=> array('status'=>'0','message'=>'Please enter current password'));
 			echo json_encode($err); exit;
 		}
 
 
 		if(empty($new_password)){
-			$err = array('data'=> array('status'=>'0','msg'=>'Please enter new Password'));
+			$err = array('data'=> array('status'=>'0','message'=>'Please enter new Password'));
 			echo json_encode($err); exit;
 
 		}
@@ -1527,25 +1436,25 @@ class App extends CI_Controller {
 		$new_password=base64_encode($new_password);
 		
 		if(!$user_data = $this->Common_model->getRecords($tableName,'*',array('user_id' => $user_id,'status'=>'Active'),'',true)) {
-			$err = array('data'=> array('status'=>'5','msg'=>'Your profile has been Inactive by admin.'));
+			$err = array('data'=> array('status'=>'5','message'=>'Your profile has been Inactive by admin.'));
 			echo json_encode($err); exit;
 		} else {
 			if($user_data['password'] != $current_password) {
-				// $err = array('data'=> array('status'=>'0','msg'=>'Incorrect current password'));
+				// $err = array('data'=> array('status'=>'0','message'=>'Incorrect current password'));
 
 					if($this->language=='english'){
-							$err = array('data'=> array('status'=>'0','msg'=>'Incorrect current password'));
+							$err = array('data'=> array('status'=>'0','message'=>'Incorrect current password'));
 					}elseif ($this->language=='arabic') {
-							$err = array('data'=> array('status'=>'0','msg'=>'كلمة المرور الحالية غير صحيحة'));
+							$err = array('data'=> array('status'=>'0','message'=>'كلمة المرور الحالية غير صحيحة'));
 					}elseif ($this->language=='french') {
-							$err = array('data'=> array('status'=>'0','msg'=>'incorrect current password'));
+							$err = array('data'=> array('status'=>'0','message'=>'incorrect current password'));
 					}
 
 
 				echo json_encode($err); exit;
 			} else {
 				if($new_password == $user_data['password']) {
-					$err = array('data' =>array('status' => '0', 'msg' => "New password can't be same as current password."));
+					$err = array('data' =>array('status' => '0', 'message' => "New password can't be same as current password."));
 					echo json_encode($err); exit;
 				}
 		        $update_data = array(
@@ -1558,18 +1467,18 @@ class App extends CI_Controller {
 	   	
 
 	   			if($this->language=='english'){
-							$response = array('data'=> array('status'=>'1','msg'=>'Password changed successfully'));
+							$response = array('data'=> array('status'=>'1','message'=>'Password changed successfully'));
 					}elseif ($this->language=='arabic') {
-							$response = array('data'=> array('status'=>'1','msg'=>'تم تغيير الرقم السري بنجاح'));
+							$response = array('data'=> array('status'=>'1','message'=>'تم تغيير الرقم السري بنجاح'));
 					}elseif ($this->language=='french') {
-							$response = array('data'=> array('status'=>'1','msg'=>'Password changed successfully'));
+							$response = array('data'=> array('status'=>'1','message'=>'Password changed successfully'));
 					}
 
 
 	   				
 					echo json_encode($response);  exit;
 	   			} else {
-	   				$err = array('data' =>array('status' => '0', 'msg' => 'Server not responding please try again !!'));
+	   				$err = array('data' =>array('status' => '0', 'message' => 'Server not responding please try again !!'));
 					echo json_encode($err); exit;
 	   			}
 			}
@@ -1582,16 +1491,16 @@ class App extends CI_Controller {
 		$page_id  =	$this->test_input($this->input->post('page_id'));
 
 		if(empty($page_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please send page id'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please send page id'));
 			echo json_encode($err); exit;
 		}
 		$tableName = 'pages';
 		$where = array('page_id' => $page_id);
 		if(!$page_data = $this->Common_model->getRecords($tableName,'*',$where,'',true)) {
-			$err = array('data' =>array('status' => '0', 'msg' => 'Page id not exists'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Page id not exists'));
 			echo json_encode($err); exit;
 		} else {
-			$response = array('data'=> array('status'=>'1','msg'=>'Page found successfully','details'=>$page_data));
+			$response = array('data'=> array('status'=>'1','message'=>'Page found successfully','details'=>$page_data));
 			echo json_encode($response); exit;
 		}
 	}
@@ -1603,10 +1512,10 @@ class App extends CI_Controller {
         $tableName = 'faq';
 		$where = array('status' =>'Active','approved'=>1);
 		if(!$page_data = $this->Common_model->getRecords($tableName,'*',$where,'',false)) {
-			$err = array('data' =>array('status' => '0', 'msg' => 'Server not responding please try again !!'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Server not responding please try again !!'));
 			echo json_encode($err); exit;
 		} else {
-			$response = array('data'=> array('status'=>'1','msg'=>'Faq found successfully','details'=>$page_data));
+			$response = array('data'=> array('status'=>'1','message'=>'Faq found successfully','details'=>$page_data));
 			echo json_encode($response); exit;
 		}
 	}
@@ -1622,15 +1531,15 @@ class App extends CI_Controller {
 
 
        if(empty($user_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter your user id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter your user id.'));
 			echo json_encode($err); exit;
 		} 
 
        if(empty($location)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter location Type.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter location Type.'));
 			echo json_encode($err); exit;
 		} else if($location != 'Yes' && $location != 'No') {
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter exact location Type.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter exact location Type.'));
 			echo json_encode($err); exit;
 		}
        if($location == 'Yes'){
@@ -1648,10 +1557,10 @@ class App extends CI_Controller {
 		    );
         }
 		if(!$this->Common_model->addEditRecords('users', $update_data,array('user_id'=>$user_id))) {
-		    $err = array('data' =>array('status' => '0', 'msg' => 'Some error occured! Please try again.'));
+		    $err = array('data' =>array('status' => '0', 'message' => 'Some error occured! Please try again.'));
             echo json_encode($err); exit;
 		} else {
-			$suc = array('data' =>array('status' => '1', 'msg' => 'location updated successfully.'));
+			$suc = array('data' =>array('status' => '1', 'message' => 'location updated successfully.'));
             echo json_encode($suc); exit;
 		} 
     }
@@ -1663,12 +1572,12 @@ class App extends CI_Controller {
 			$email = $this->test_input($this->input->post('email'));
 		  	  
 			if(empty($email)) {
-				$err = array('data'=> array('status'=>'0','msg'=>'Please enter your email.'));
+				$err = array('data'=> array('status'=>'0','message'=>'Please enter your email.'));
 				echo json_encode($err); exit;
 			}
 
 			if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
-				$err = array('data' =>array('status' => '0', 'msg' => 'Please enter valid email.'));
+				$err = array('data' =>array('status' => '0', 'message' => 'Please enter valid email.'));
 				echo json_encode($err);exit;
 			}
 
@@ -1676,7 +1585,7 @@ class App extends CI_Controller {
 			$tableName ='users';
 			$where = array('email' =>$email);
 			if(!$user_data = $this->Common_model->getRecords($tableName,'user_id,username,full_name,password',$where,'',true)) {
-				$err = array('data' =>array('status' => '0', 'msg' => 'Please enter registered email.'));
+				$err = array('data' =>array('status' => '0', 'message' => 'Please enter registered email.'));
 			echo json_encode($err); exit;
 		} else {
 			
@@ -1699,10 +1608,10 @@ class App extends CI_Controller {
 			if($this->Common_model->defaultEmailSend($to_email,$subject,$body,$from_email)) 
 			{
 
-				$response = array('data'=> array('status'=>'1','msg'=>'We have sent your password to the email.'));
+				$response = array('data'=> array('status'=>'1','message'=>'We have sent your password to the email.'));
 				echo json_encode($response); exit;
 			} else {
-				$err = array('data' =>array('status' => '0', 'msg' => 'Some error occured. Please try again !!.'));
+				$err = array('data' =>array('status' => '0', 'message' => 'Some error occured. Please try again !!.'));
 				echo json_encode($err); exit;
 			}
 		}
@@ -1713,12 +1622,12 @@ class App extends CI_Controller {
 			$email = $this->test_input($this->input->post('email'));
 		  	  
 			if(empty($email)) {
-				$err = array('data'=> array('status'=>'0','msg'=>'Please enter your email.'));
+				$err = array('data'=> array('status'=>'0','message'=>'Please enter your email.'));
 				echo json_encode($err); exit;
 			}
 
 			if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
-				$err = array('data' =>array('status' => '0', 'msg' => 'Please enter valid email.'));
+				$err = array('data' =>array('status' => '0', 'message' => 'Please enter valid email.'));
 				echo json_encode($err);exit;
 			}
 
@@ -1726,7 +1635,7 @@ class App extends CI_Controller {
 			$tableName ='users';
 			$where = array('email' =>$email);
 			if(!$user_data = $this->Common_model->getRecords($tableName,'user_id,username,full_name,password',$where,'',true)) {
-				$err = array('data' =>array('status' => '0', 'msg' => 'Please enter registered email.'));
+				$err = array('data' =>array('status' => '0', 'message' => 'Please enter registered email.'));
 			echo json_encode($err); exit;
 		} else {
 			
@@ -1749,10 +1658,10 @@ class App extends CI_Controller {
 			if($this->Common_model->sendEmail($to_email,$subject,$body,$from_email)) 
 			{
 
-				$response = array('data'=> array('status'=>'1','msg'=>'We have sent your password to the email.'));
+				$response = array('data'=> array('status'=>'1','message'=>'We have sent your password to the email.'));
 				echo json_encode($response); exit;
 			} else {
-				$err = array('data' =>array('status' => '0', 'msg' => 'Some error occured. Please try again !!.'));
+				$err = array('data' =>array('status' => '0', 'message' => 'Some error occured. Please try again !!.'));
 				echo json_encode($err); exit;
 			}
 		}
@@ -1768,27 +1677,27 @@ class App extends CI_Controller {
 		$tableName = 'users';
 		$user_data = array();
 		if(empty($code)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter reset password code.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter reset password code.'));
 			echo json_encode($err); exit;
 		} else {
 			$where = array('email' => $email,'token' => $code);
 			if(!$user_data = $this->Common_model->getRecords($tableName,'*',$where,'',true)) {
-				$err = array('data' =>array('status' => '0', 'msg' => 'Please enter valid code received on the email.'));
+				$err = array('data' =>array('status' => '0', 'message' => 'Please enter valid code received on the email.'));
 				echo json_encode($err); exit;
 			}
 		}
 
 		if(empty($new_password)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter your password.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter your password.'));
 			echo json_encode($err); exit;
 		} else if(!passwordValidate($new_password)) {
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter valid password.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter valid password.'));
 			echo json_encode($err); exit;
 		}
 
 		$new_password = base64_encode($new_password);
 		if($new_password == $user_data['password']) {
-			$err = array('data' =>array('status' => '0', 'msg' => "New password can't be same as old password."));
+			$err = array('data' =>array('status' => '0', 'message' => "New password can't be same as old password."));
 			echo json_encode($err); exit;
 		}
 
@@ -1797,7 +1706,7 @@ class App extends CI_Controller {
 		$current_date=strtotime(date("Y-m-d H:i:s"));
 		$diff=$current_date-$token_date;
 		if($diff > 86400) {
-			$err = array('data' =>array('status' => '0', 'msg' => 'Reset password code has been expired !!'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Reset password code has been expired !!'));
 			echo json_encode($err); exit;
 		} 
 		
@@ -1852,10 +1761,10 @@ class App extends CI_Controller {
 				$this->Common_model->addEditRecords('notifications',$add_data); 
 			}
 
-			$response = array('data'=> array('status'=>'1','msg'=>'Password reset successfully.'));
+			$response = array('data'=> array('status'=>'1','message'=>'Password reset successfully.'));
 			echo json_encode($response); exit;
 		} else {
-			$err = array('data' =>array('status' => '0', 'msg' => 'Server not responding. Please try again !!'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Server not responding. Please try again !!'));
 			echo json_encode($err); exit;
 		}
 	}
@@ -1865,10 +1774,10 @@ class App extends CI_Controller {
         $tableName = 'banners';
 		
 		if(!$page_data = $this->Common_model->getRecords($tableName,'*',array('type'=>'Home'),'',true)) {
-			$err = array('data' =>array('status' => '0', 'msg' => 'Server not responding please try again !!'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Server not responding please try again !!'));
 			echo json_encode($err); exit;
 		} else {
-			$response = array('data'=> array('status'=>'1','msg'=>' banner found successfully','details'=>$page_data));
+			$response = array('data'=> array('status'=>'1','message'=>' banner found successfully','details'=>$page_data));
 			echo json_encode($response); exit;
 		}
 	}
@@ -1877,10 +1786,10 @@ class App extends CI_Controller {
         $tableName = 'banners';
 		
 		if(!$page_data = $this->Common_model->getRecords($tableName,'*',array('type'=>'FAQ'),'',true)) {
-			$err = array('data' =>array('status' => '0', 'msg' => 'Server not responding please try again !!'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Server not responding please try again !!'));
 			echo json_encode($err); exit;
 		} else {
-			$response = array('data'=> array('status'=>'1','msg'=>' banner found successfully','details'=>$page_data));
+			$response = array('data'=> array('status'=>'1','message'=>' banner found successfully','details'=>$page_data));
 			echo json_encode($response); exit;
 		}
 	}
@@ -1915,18 +1824,18 @@ class App extends CI_Controller {
       
 
        if(empty($detail) && empty($_FILES['user_photo']['name'])){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter Detail Or Photo'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter Detail Or Photo'));
 			echo json_encode($err); exit;
 		} 
 
 
         if(empty($user_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter User Id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter User Id.'));
 			echo json_encode($err); exit;
 		} 
 
 		if(empty($post_title)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter Post Title.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter Post Title.'));
 			echo json_encode($err); exit;
 		}
  
@@ -1940,12 +1849,12 @@ class App extends CI_Controller {
 					$filename = $_FILES['user_photo']['name'][$i];
 				    $ext = pathinfo($filename, PATHINFO_EXTENSION);
 				    if(!in_array($ext,$allowed) ) {
-					   $err = array('data' =>array('status' => '0', 'msg' => 'Only jpg|jpeg|png image types allowed..'));
+					   $err = array('data' =>array('status' => '0', 'message' => 'Only jpg|jpeg|png image types allowed..'));
 			   			echo json_encode($err); exit;	
 				    } 
 			    }
             } else {
-				$err = array('data' =>array('status' => '0', 'msg' => 'You can not uplode more than 5.'));
+				$err = array('data' =>array('status' => '0', 'message' => 'You can not uplode more than 5.'));
 			    echo json_encode($err); exit;
             }
         }
@@ -1960,12 +1869,12 @@ class App extends CI_Controller {
 					$filename = $_FILES['user_video']['name'][$i];
 				    $ext = pathinfo($filename, PATHINFO_EXTENSION);
 				    if(!in_array($ext,$allowed) ) {
-					   $err = array('data' =>array('status' => '0', 'msg' => 'Only mp4 image types allowed..'));
+					   $err = array('data' =>array('status' => '0', 'message' => 'Only mp4 image types allowed..'));
 			   			echo json_encode($err); exit;	
 				    } 
 			    }
             } else {
-			$err = array('data' =>array('status' => '0', 'msg' => 'You can not uplode more than 2.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'You can not uplode more than 2.'));
 		    echo json_encode($err); exit;
             }
         }
@@ -2384,12 +2293,12 @@ class App extends CI_Controller {
 						$this->Common_model->addEditRecords('post_img', $uploadData);
 					} else {
 						$error = array('error' => $this->upload->display_errors());
-                        $err = array('data' =>array('status' => '0', 'msg' => $error ));
+                        $err = array('data' =>array('status' => '0', 'message' => $error ));
 						echo json_encode($err); exit;
 					}
 				} 
 			} else {
-				$err = array('data' =>array('status' => '0', 'msg' => 'You can not uplode more then 5.'));
+				$err = array('data' =>array('status' => '0', 'message' => 'You can not uplode more then 5.'));
 				echo json_encode($err); exit;
 			}
 		}
@@ -2427,14 +2336,14 @@ class App extends CI_Controller {
 						$videoData = $this->upload->data();
 					} else {
 						$error = array('error' => $this->upload->display_errors());
-                        $err = array('data' =>array('status' => '0', 'msg' => $error ));
+                        $err = array('data' =>array('status' => '0', 'message' => $error ));
 						echo json_encode($err); exit;
 					}
 					if($this->upload->do_upload('post_user_video')){
 						$filevideo = $this->upload->data();	
 					} else {
 						$error = array('error' => $this->upload->display_errors());
-                        $err = array('data' =>array('status' => '0', 'msg' => $error ));
+                        $err = array('data' =>array('status' => '0', 'message' => $error ));
 						echo json_encode($err); exit;
 					}
 					$uploadData = array();
@@ -2449,16 +2358,16 @@ class App extends CI_Controller {
 					$this->Common_model->addEditRecords('post_img', $uploadData);
 				} 
 			} else {
-				$err = array('data' =>array('status' => '0', 'msg' => 'You can not upload more then 5.'));
+				$err = array('data' =>array('status' => '0', 'message' => 'You can not upload more then 5.'));
 				echo json_encode($err); exit;
 			}
 		}
                       
 		if(!$last_id) {
-		    $err = array('data' =>array('status' => '0', 'msg' => 'Some error occured! Please try again.'));
+		    $err = array('data' =>array('status' => '0', 'message' => 'Some error occured! Please try again.'));
 		    echo json_encode($err); exit;
 		} else {
-			$response = array('data'=> array('status'=>'1','msg'=>'Posted'));
+			$response = array('data'=> array('status'=>'1','message'=>'Posted'));
 		    echo json_encode($response); exit;
 		}
     }
@@ -2620,10 +2529,10 @@ class App extends CI_Controller {
 			$where = array('user_id' =>$user_id);
 			$count=$this->Common_model->getRecords('users','badge_count,chat_badge',$where,'',true); 
 		
-		$response = array('data'=> array('status'=>'1','msg'=>'Post','details'=>$getPost,'badge_count'=>$count['badge_count'],'chat_badge'=>$count['chat_badge']));
+		$response = array('data'=> array('status'=>'1','message'=>'Post','details'=>$getPost,'badge_count'=>$count['badge_count'],'chat_badge'=>$count['chat_badge']));
 		echo json_encode($response); exit;
 		} else {
-			$err = array('data' =>array('status' => '0', 'msg' => 'No Data Found'));
+			$err = array('data' =>array('status' => '0', 'message' => 'No Data Found'));
 			echo json_encode($err); exit;	
 		}
 	} 
@@ -2651,12 +2560,12 @@ class App extends CI_Controller {
         $media_id		 =	$this->test_input($this->input->post('media_id'));
       	$this->check_login();
        if(empty($media_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter media Id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter media Id.'));
 			echo json_encode($err); exit;
 		} 
 
        if(empty($user_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter User Id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter User Id.'));
 			echo json_encode($err); exit;
 		}
 
@@ -2670,7 +2579,7 @@ class App extends CI_Controller {
 				$likes = '0';
 			}
 
-			$response = array('data'=> array('status'=>'1','msg'=>'unlike','count'=>$likes));
+			$response = array('data'=> array('status'=>'1','message'=>'unlike','count'=>$likes));
 			echo json_encode($response); exit;
 		} else {
 		        $add_data =array('media_id' => $media_id,'user_id' => $user_id,'created' => date("Y-m-d H:i:s"));
@@ -2723,7 +2632,7 @@ class App extends CI_Controller {
 						$likes = '0';
 					}
 	     
-         	$response = array('data'=> array('status'=>'1','msg'=>'like','count'=>$likes));
+         	$response = array('data'=> array('status'=>'1','message'=>'like','count'=>$likes));
 			echo json_encode($response); exit;  
         }
 	} 
@@ -2735,7 +2644,7 @@ class App extends CI_Controller {
         $chat_room_id		 =	$this->test_input($this->input->post('room_id'));
       	$this->check_login();   
        if(empty($chat_room_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter room Id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter room Id.'));
 			echo json_encode($err); exit;
 		} 
 
@@ -2765,7 +2674,7 @@ class App extends CI_Controller {
 			  
 		
 
-			$response = array('data'=> array('status'=>'1','msg'=>'Patient unblocked'));
+			$response = array('data'=> array('status'=>'1','message'=>'Patient unblocked'));
 			echo json_encode($response); exit;
 		} else {
 
@@ -2788,7 +2697,7 @@ class App extends CI_Controller {
 
 		   	// $this->Common_model->addEditRecords('users_chat',array('is_blocked'=>1),array('room_id' => $chat_room_id));    
 
-         	$response = array('data'=> array('status'=>'1','msg'=>'Patient blocked'));
+         	$response = array('data'=> array('status'=>'1','message'=>'Patient blocked'));
 			echo json_encode($response); exit;
         }
 	} 
@@ -2800,7 +2709,7 @@ class App extends CI_Controller {
         $dr_id		 =	$this->test_input($this->input->post('dr_id'));
       	$this->check_login();
        	if(empty($dr_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter dr id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter dr id.'));
 			echo json_encode($err); exit;
 		} 
 
@@ -2844,11 +2753,11 @@ class App extends CI_Controller {
 
 
 			if($this->language=='english'){
-					$response = array('data'=> array('status'=>'1','msg'=>'Appointment request sent successfully'));
+					$response = array('data'=> array('status'=>'1','message'=>'Appointment request sent successfully'));
 			}elseif ($this->language=='arabic') {
-					$response = array('data'=> array('status'=>'1','msg'=>'طلب حجز موعد تم بنجاح) '));
+					$response = array('data'=> array('status'=>'1','message'=>'طلب حجز موعد تم بنجاح) '));
 			}elseif ($this->language=='french') {
-					$response = array('data'=> array('status'=>'1','msg'=>'Une demande de rendez-vous a été envoyée avec succès'));
+					$response = array('data'=> array('status'=>'1','message'=>'Une demande de rendez-vous a été envoyée avec succès'));
 			}
 	    
          
@@ -2867,17 +2776,17 @@ class App extends CI_Controller {
         $page_id		 =	$this->test_input($this->input->post('page_id'));
        
        if(empty($post_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter Post Id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter Post Id.'));
 			echo json_encode($err); exit;
 		}
 
        if(empty($user_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter User Id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter User Id.'));
 			echo json_encode($err); exit;
 		}
 
 		if(empty($comment)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter Comment.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter Comment.'));
 			echo json_encode($err); exit;
 		}
 		$where = array('post_id' => $post_id);
@@ -2941,7 +2850,7 @@ class App extends CI_Controller {
 		}else {
 			$comment = '0';
 		}
-        $response = array('data'=> array('status'=>'1','msg'=>'comment','details'=>$comment));
+        $response = array('data'=> array('status'=>'1','message'=>'comment','details'=>$comment));
 		echo json_encode($response); exit;
      }  
 
@@ -2958,14 +2867,14 @@ class App extends CI_Controller {
 		}   
 
 		if(empty($post_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter Post Id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter Post Id.'));
 			echo json_encode($err); exit;
 		}else {
 			$tableName="user_post";
 			$where = array('post_id' =>$post_id,'is_deleted'=>'0','status'=>'Active');
 			$view_post=$this->Common_model->getRecords($tableName,'view_post,post_id',$where,'',true);
 			if(empty($view_post)){
-				$err = array('data' =>array('status' => '0', 'msg' => 'Post is Deactive or may be Deleted.'));
+				$err = array('data' =>array('status' => '0', 'message' => 'Post is Deactive or may be Deleted.'));
 				echo json_encode($err); exit;
 			}
 		}
@@ -3107,11 +3016,11 @@ class App extends CI_Controller {
 			}else {
 				$getPost['tag_page'] = array();
 			}
-			$response = array('data'=> array('status'=>'1','msg'=>'Details','details'=>$getPost));
+			$response = array('data'=> array('status'=>'1','message'=>'Details','details'=>$getPost));
 			echo json_encode($response); exit;
 			   
 		}else {
-            $response = array('data'=> array('status'=>'0','msg'=>'Some error occured. Please try again !!.'));
+            $response = array('data'=> array('status'=>'0','message'=>'Some error occured. Please try again !!.'));
 			echo json_encode($response); exit;
            
         }
@@ -3123,7 +3032,7 @@ class App extends CI_Controller {
         $page_id =	$this->test_input($this->input->post('page_id'));
 
         if(empty($post_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter Post Id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter Post Id.'));
 			echo json_encode($err); exit;
 		}
             if($post_comment = $this->App_model->getcommentlist($post_id)) {
@@ -3141,10 +3050,10 @@ class App extends CI_Controller {
 				      	}
 				      	 $index++;
 		      	}
-				$response = array('data'=> array('status'=>'1','msg'=>'comment found successfully','details'=>$post_comment));
+				$response = array('data'=> array('status'=>'1','message'=>'comment found successfully','details'=>$post_comment));
 				echo json_encode($response); exit;
 			}else {
-				$response = array('data'=> array('status'=>'0','msg'=>'Be the first one to comment'));
+				$response = array('data'=> array('status'=>'0','message'=>'Be the first one to comment'));
 				echo json_encode($response); exit;
 			}
     }
@@ -3175,10 +3084,10 @@ class App extends CI_Controller {
 				}
             	
              
-				$response = array('data'=> array('status'=>'1','msg'=>'Following List Found Successfully','details'=>$post_comment));
+				$response = array('data'=> array('status'=>'1','message'=>'Following List Found Successfully','details'=>$post_comment));
 				echo json_encode($response); exit;
 			}else {
-				$response = array('data'=> array('status'=>'0','msg'=>'No Follow found '));
+				$response = array('data'=> array('status'=>'0','message'=>'No Follow found '));
 				echo json_encode($response); exit;
 			}
     }
@@ -3220,10 +3129,10 @@ class App extends CI_Controller {
 					$post_comments = multid_sort($post_comment, 'on_top','Desc'); 
 				}
 				// echo "<pre>";print_r($post_comments);
-				$response = array('data'=> array('status'=>'1','msg'=>'Follower List Found Successfully','details'=>$post_comments));
+				$response = array('data'=> array('status'=>'1','message'=>'Follower List Found Successfully','details'=>$post_comments));
 				echo json_encode($response); exit;
 			}else {
-				$response = array('data'=> array('status'=>'0','msg'=>'No Following found '));
+				$response = array('data'=> array('status'=>'0','message'=>'No Following found '));
 				echo json_encode($response); exit;
 			}
     }
@@ -3234,7 +3143,7 @@ class App extends CI_Controller {
         $follow_user_id =	$this->test_input($this->input->post('follow_user_id'));
     	
         if(empty($follow_user_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter Follow User Id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter Follow User Id.'));
 			echo json_encode($err); exit;
 		}
 
@@ -3246,7 +3155,7 @@ class App extends CI_Controller {
 					$add =array('status' =>'1');
 					$this->Common_model->addEditRecords('notifications',$add,$where11); 
 
-				$response = array('data'=> array('status'=>'1','msg'=>'Unfollow'));
+				$response = array('data'=> array('status'=>'1','message'=>'Unfollow'));
 					echo json_encode($response); exit;
 			}else{
 				$update_data  =  array('user_id' => $follow_user_id);
@@ -3324,7 +3233,7 @@ class App extends CI_Controller {
 
             	$this->Common_model->addEditRecords('follow_user',$update_data);
           
-            	$response = array('data'=> array('status'=>'1','msg'=>$status,'details'=>$status));
+            	$response = array('data'=> array('status'=>'1','message'=>$status,'details'=>$status));
 				echo json_encode($response); exit;
             }
     }
@@ -3339,12 +3248,12 @@ class App extends CI_Controller {
         $post_owner	     =  $this->test_input($this->input->post('post_owner'));
 
         if(empty($post_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter Post Id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter Post Id.'));
 			echo json_encode($err); exit;
 		}
 
 		if(empty($post_owner)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter Post Owner Id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter Post Owner Id.'));
 			echo json_encode($err); exit;
 		}
 
@@ -3446,10 +3355,10 @@ class App extends CI_Controller {
 			
 
 
-        	$response = array('data'=> array('status'=>'1','msg'=>'Post Shared'));
+        	$response = array('data'=> array('status'=>'1','message'=>'Post Shared'));
 			echo json_encode($response); exit;
         }else{
-        	$response = array('data'=> array('status'=>'0','msg'=>'Some error occured. Please try again !!.'));
+        	$response = array('data'=> array('status'=>'0','message'=>'Some error occured. Please try again !!.'));
 			echo json_encode($response); exit;
         }
 
@@ -3462,7 +3371,7 @@ class App extends CI_Controller {
         $post_id =	$this->test_input($this->input->post('post_id'));
 
         if(empty($post_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter Post Id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter Post Id.'));
 			echo json_encode($err); exit;
 		}
 
@@ -3473,10 +3382,10 @@ class App extends CI_Controller {
         $update_data = array('post_id' => $post_id,'user_id' => $user_id, 'report_detail' => $report_detail, 'It_Spam' => $It_Spam , 'It_Inappropriate' => $It_Inappropriate,  'created' => date("Y-m-d H:i:s"));
              		
         if($this->Common_model->addEditRecords('report_post',$update_data)){
-        	$response = array('data'=> array('status'=>'1','msg'=>'Thank you for your report'));
+        	$response = array('data'=> array('status'=>'1','message'=>'Thank you for your report'));
 			echo json_encode($response); exit;
         }else{
-        	$response = array('data'=> array('status'=>'0','msg'=>'Some error occured. Please try again !!.'));
+        	$response = array('data'=> array('status'=>'0','message'=>'Some error occured. Please try again !!.'));
 			echo json_encode($response); exit;
         }
 
@@ -3487,7 +3396,7 @@ class App extends CI_Controller {
         $post_id =	$this->test_input($this->input->post('post_id')); 
 
         if(empty($post_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter Post Id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter Post Id.'));
 			echo json_encode($err); exit;
 		}
 		$where = array('post_id' =>$post_id);
@@ -3502,10 +3411,10 @@ class App extends CI_Controller {
       
         $array = array('is_deleted' => '1','deleted_by' => 'user'); 
         if($this->Common_model->addEditRecords('user_post',$array,$update_data)){
-        	$response = array('data'=> array('status'=>'1','msg'=>'Post Deleted'));
+        	$response = array('data'=> array('status'=>'1','message'=>'Post Deleted'));
 			echo json_encode($response); exit;
         }else {
-        	$response = array('data'=> array('status'=>'0','msg'=>'Some error occured. Please try again !!.'));
+        	$response = array('data'=> array('status'=>'0','message'=>'Some error occured. Please try again !!.'));
 			echo json_encode($response); exit;
 		}
 	}
@@ -3520,10 +3429,10 @@ class App extends CI_Controller {
         $tableName = 'categories';
 		$where = array('status'=>'Active');
 		if(!$categories = $this->Common_model->getRecords($tableName,'category_id,name',$where,'orders ASC',false)) {
-			$err = array('data' =>array('status' => '0', 'msg' => 'Server not responding please try again !!'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Server not responding please try again !!'));
 			echo json_encode($err); exit;
 		} else {
-			$response = array('data'=> array('status'=>'1','msg'=>' categories found successfully','details'=>$categories));
+			$response = array('data'=> array('status'=>'1','message'=>' categories found successfully','details'=>$categories));
 			echo json_encode($response); exit;
 		}
 	}
@@ -3533,7 +3442,7 @@ class App extends CI_Controller {
 		$categories	=	$this->test_input($this->input->post('categories_id'));
 	  			
   			if(empty($categories)){
-				$err = array('data' =>array('status' => '0', 'msg' => 'Please Select Categories.'));
+				$err = array('data' =>array('status' => '0', 'message' => 'Please Select Categories.'));
 				echo json_encode($err); exit;
 			} 
 
@@ -3542,11 +3451,11 @@ class App extends CI_Controller {
         $tableName = 'sub_categories';
 		$where = array('category_id' => $categories,'status'=>'Active');
 		if(!$sub_categories = $this->Common_model->getRecords($tableName,'sub_category_id,name,image',$where,'orders ASC',false)) { 
-			$err = array('data' =>array('status' => '0', 'msg' => 'categories not valid please try again !!'));
+			$err = array('data' =>array('status' => '0', 'message' => 'categories not valid please try again !!'));
 			echo json_encode($err); exit;
 		} else {
   
-			$response = array('data'=> array('status'=>'1','msg'=>' sub categoriesfound successfully','details'=>$sub_categories));
+			$response = array('data'=> array('status'=>'1','message'=>' sub categoriesfound successfully','details'=>$sub_categories));
 			echo json_encode($response); exit;
 		}
 	}
@@ -3559,7 +3468,7 @@ class App extends CI_Controller {
 		$user_id =	$this->input->post('user_id');
 		if(empty($user_id))
 		{
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter user_id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter user_id.'));
 			echo json_encode($err); exit;
 		}
  
@@ -3575,11 +3484,11 @@ class App extends CI_Controller {
 	    		$category_name =  $this->Common_model->getRecords('categories','name',array('category_id'=>$user_details['category_id']),'',true);
 	    		$user_details['category_name'] =$category_name['name'];
 			 
-			$response = array('data'=> array('status'=>'1','msg'=>'Details','details'=>$user_details));
+			$response = array('data'=> array('status'=>'1','message'=>'Details','details'=>$user_details));
 			echo json_encode($response); exit;
 			   
 		}else {
-            $response = array('data'=> array('status'=>'0','msg'=>'User not found.'));
+            $response = array('data'=> array('status'=>'0','message'=>'User not found.'));
 			echo json_encode($response); exit;
            
         }
@@ -3593,13 +3502,13 @@ class App extends CI_Controller {
    		$device_type =	$this->input->post('device_type');
 		if(empty($device_id))
 		{
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter device_id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter device_id.'));
 			echo json_encode($err); exit;
 		}
 		$device_type =	$this->input->post('device_type');
 		if(empty($device_type))
 		{
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter device_type.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter device_type.'));
 			echo json_encode($err); exit;
 		} 
 
@@ -3613,15 +3522,15 @@ class App extends CI_Controller {
 			
 	 		if(!$ad_id= $this->Common_model->addEditRecords('devices_id', $insert_data)) {
 				
-				$err = array('data' =>array('status' => '0', 'msg' => 'Some error occured! Please try again.'));
+				$err = array('data' =>array('status' => '0', 'message' => 'Some error occured! Please try again.'));
 				echo json_encode($err); exit;
 			} else {
-				$err = array('data' =>array('status' => '1', 'msg' => 'Device Added'));
+				$err = array('data' =>array('status' => '1', 'message' => 'Device Added'));
 				echo json_encode($err); exit;
 	   		}
    		}else
    		{
-   			$err = array('data' =>array('status' => '1', 'msg' => 'Device Added'));
+   			$err = array('data' =>array('status' => '1', 'message' => 'Device Added'));
 			echo json_encode($err); exit;
    		}
    }	
@@ -3633,7 +3542,7 @@ class App extends CI_Controller {
 		$user_id  = $this->input->post('user_id');
 		$this->check_login();
 		if(empty($user_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter user_id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter user_id.'));
 			echo json_encode($err); exit;
 		}
 		// Get My Doctor
@@ -3662,11 +3571,11 @@ class App extends CI_Controller {
         		// echo $this->db->last_query();
         	}
 
-			$response = array('data'=> array('status'=>'1','msg'=>'list','doctor_list'=>$dr_list));
+			$response = array('data'=> array('status'=>'1','message'=>'list','doctor_list'=>$dr_list));
 			echo json_encode($response); exit;
         }else
         {
-			$err = array('data' =>array('status' => '0', 'msg' => 'doctors not found !!'));
+			$err = array('data' =>array('status' => '0', 'message' => 'doctors not found !!'));
 			echo json_encode($err); exit;
         }
 			
@@ -3678,11 +3587,11 @@ class App extends CI_Controller {
 		$user_id  = $this->input->post('user_id');
 		$this->check_login();
 		if(empty($doctor_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter doctor_id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter doctor_id.'));
 			echo json_encode($err); exit;
 		}
 		if(empty($user_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter user_id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter user_id.'));
 			echo json_encode($err); exit;
 		}
 
@@ -3721,11 +3630,11 @@ class App extends CI_Controller {
 					}
 				}  	       	 
 
-			$response = array('data'=> array('status'=>'1','msg'=>'list','doctor_detail'=>$doctor_detail,'media_list'=>$media));
+			$response = array('data'=> array('status'=>'1','message'=>'list','doctor_detail'=>$doctor_detail,'media_list'=>$media));
 			echo json_encode($response); exit;
         }else
         {
-			$err = array('data' =>array('status' => '0', 'msg' => 'doctors not found !!'));
+			$err = array('data' =>array('status' => '0', 'message' => 'doctors not found !!'));
 			echo json_encode($err); exit;
         }	 
    }	
@@ -3736,11 +3645,11 @@ class App extends CI_Controller {
 		$user_id  = $this->input->post('user_id');
 		$this->check_login();
 		if(empty($media_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter media_id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter media_id.'));
 			echo json_encode($err); exit;
 		}
 		if(empty($user_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter user_id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter user_id.'));
 			echo json_encode($err); exit;
 		}
  
@@ -3757,11 +3666,11 @@ class App extends CI_Controller {
 					 	$media_details['is_liked']='0';
 					 }
 
-					 $response = array('data'=> array('status'=>'1','msg'=>'list','details'=>$media_details));
+					 $response = array('data'=> array('status'=>'1','message'=>'list','details'=>$media_details));
 						echo json_encode($response); exit;
 				}else
 		        {
-					$err = array('data' =>array('status' => '0', 'msg' => 'media not found !!'));
+					$err = array('data' =>array('status' => '0', 'message' => 'media not found !!'));
 					echo json_encode($err); exit;
 		        }	   	       	 
 
@@ -3778,23 +3687,23 @@ class App extends CI_Controller {
 	  
 	  	$this->check_login();
 		if(empty($media_type)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please select media type.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please select media type.'));
 			echo json_encode($err); exit;
 		}else
 		{
 			if($media_type!='video' && $media_type!='audio' && $media_type!='image')
 			{
-				$err = array('data' =>array('status' => '0', 'msg' => 'User type must be video or audio or image.'));
+				$err = array('data' =>array('status' => '0', 'message' => 'User type must be video or audio or image.'));
 				echo json_encode($err); exit;	
 			}
 		} 
 		
 		if(empty($user_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter user_id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter user_id.'));
 			echo json_encode($err); exit;
 		}  
 		if(empty($title)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter title.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter title.'));
 			echo json_encode($err); exit;
 		}  
 
@@ -3813,7 +3722,7 @@ class App extends CI_Controller {
 			$this->upload->initialize($config);
 			if (!$this->upload->do_upload('media')) 
 			{
-				$err = array('data' =>array('status' => '0', 'msg' =>strip_tags($this->upload->display_errors())));
+				$err = array('data' =>array('status' => '0', 'message' =>strip_tags($this->upload->display_errors())));
 	            echo json_encode($err); exit; 		
 			}
 			else
@@ -3822,7 +3731,7 @@ class App extends CI_Controller {
             } 
         }else
         {
-        		$err = array('data' =>array('status' => '0', 'msg' => 'Please upload media.'));
+        		$err = array('data' =>array('status' => '0', 'message' => 'Please upload media.'));
 				echo json_encode($err); exit;
         } 
 
@@ -3838,7 +3747,7 @@ class App extends CI_Controller {
 			$this->upload->initialize($config);
 			if (!$this->upload->do_upload('video_image')) 
 			{
-				$err = array('data' =>array('status' => '0', 'msg' =>strip_tags($this->upload->display_errors())));
+				$err = array('data' =>array('status' => '0', 'message' =>strip_tags($this->upload->display_errors())));
 	            echo json_encode($err); exit; 		
 			}
 			else
@@ -3851,7 +3760,7 @@ class App extends CI_Controller {
         {
         	if($media_type=='video'){
 
-        		$err = array('data' =>array('status' => '0', 'msg' => 'Please upload video image.'));
+        		$err = array('data' =>array('status' => '0', 'message' => 'Please upload video image.'));
 				echo json_encode($err); exit;
 			}else
 			{
@@ -3903,10 +3812,10 @@ class App extends CI_Controller {
 					    $add_data =array('user_id' => $user_id,'media_id'=>$media_id,'created_by' =>$user_id,'type'=>'media_upload', 'notification_title'=> 'Media uploaded successfully.', 'notification_description'=>  'Media uploaded successfully.','created'=>date('Y-m-d H:i:s'));
 			    		$this->Common_model->addEditRecords('notifications',$add_data); 
 
-					$response = array('data'=> array('status'=>'1','msg'=>'Media uploaded successfully'));
+					$response = array('data'=> array('status'=>'1','message'=>'Media uploaded successfully'));
 				    echo json_encode($response); exit;
 			} else {
-				$err = array('data' =>array('status' => '0', 'msg' => 'Server not responding. Please try again !!'));
+				$err = array('data' =>array('status' => '0', 'message' => 'Server not responding. Please try again !!'));
 				echo json_encode($err); exit;
 			}
 	 
@@ -3915,16 +3824,16 @@ class App extends CI_Controller {
 	public function deleteMedia(){
 		$media_id = $this->input->post('media_id'); 
 		if(empty($media_id)){
-            $err = array('data' =>array('status' => '0', 'msg' => 'Please enter media id.'));
+            $err = array('data' =>array('status' => '0', 'message' => 'Please enter media id.'));
             echo json_encode($err); exit;
         }
 		$this->Common_model->deleteRecords('media',array('id'=>$media_id));
 			if($this->language=='english'){
-					$response = array('data'=> array('status'=>'1','msg'=>'Media deleted successfully'));
+					$response = array('data'=> array('status'=>'1','message'=>'Media deleted successfully'));
 			}elseif ($this->language=='arabic') {
-					$response = array('data'=> array('status'=>'1','msg'=>'تم حذف الوسائط بنجاح'));
+					$response = array('data'=> array('status'=>'1','message'=>'تم حذف الوسائط بنجاح'));
 			}elseif ($this->language=='french') {
-					$response = array('data'=> array('status'=>'1','msg'=>'Media deleted successfully'));
+					$response = array('data'=> array('status'=>'1','message'=>'Media deleted successfully'));
 			}
 		echo json_encode($response); exit;
 	}
@@ -4014,7 +3923,7 @@ class App extends CI_Controller {
 
     	$data['userTagList']   = array_merge($new_data1,$new_data); 
     	
-    	$response = array('data'=> array('status'=>'1','msg'=>'users found successfully','details'=>$data));
+    	$response = array('data'=> array('status'=>'1','message'=>'users found successfully','details'=>$data));
 		echo json_encode($response); exit;
 
 	}
@@ -4071,10 +3980,10 @@ class App extends CI_Controller {
 		}
 
 		if($data){
-			$response = array('data'=> array('status'=>'1','msg'=>'Payment history','details'=>$data));
+			$response = array('data'=> array('status'=>'1','message'=>'Payment history','details'=>$data));
 			echo json_encode($response); exit;
 		}else{
-			$err = array('data' =>array('status' => '0', 'msg' => 'Payment history not found !!'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Payment history not found !!'));
 			echo json_encode($err); exit;
 		}
 
@@ -4086,7 +3995,7 @@ class App extends CI_Controller {
 	{  	$this->check_login(); 
 		$points = $this->Common_model->getRecords('offer_plan','*','','',false);
 	
-		$response = array('data'=> array('status'=>'1','msg'=>'Offer plan','details'=>$points ));
+		$response = array('data'=> array('status'=>'1','message'=>'Offer plan','details'=>$points ));
 		echo json_encode($response);	
 	}
 
@@ -4095,7 +4004,7 @@ class App extends CI_Controller {
 	{
 		$page_id	 =	$this->input->post('page_id');
 		if(empty($page_id)){
-				$err = array('data' =>array('status' => '0', 'msg' => 'Please enter page id.'));
+				$err = array('data' =>array('status' => '0', 'message' => 'Please enter page id.'));
 				echo json_encode($err); exit;
 		}
 
@@ -4104,12 +4013,12 @@ class App extends CI_Controller {
 		$page_details=$this->Common_model->getRecords('pages','title,content',array('page_id'=>$page_id),'',true);
 		if(!empty($page_details))
  		{
- 		  $response =array('data'=> array('status'=>'1','msg'=>'results','details'=>$page_details));
+ 		  $response =array('data'=> array('status'=>'1','message'=>'results','details'=>$page_details));
  		  echo json_encode($response); 
  		  exit;
 
  		} else {
-			$response = array('data'=> array('status'=>'0','msg'=>'Results not found.'));
+			$response = array('data'=> array('status'=>'0','message'=>'Results not found.'));
 			  echo json_encode($response); 
  		} 
 	}
@@ -4141,20 +4050,20 @@ class App extends CI_Controller {
 	  	$type		     =	$this->test_input($this->input->post('type'));
 
 		if(empty($sender_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter sender id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter sender id.'));
 			echo json_encode($err); exit;
 		} 
 		if(empty($receiver_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter receiver id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter receiver id.'));
 			echo json_encode($err); exit;
 		}  
 		if(empty($type)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter type.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter type.'));
 			echo json_encode($err); exit;
 		} 
   
 	 	$get_room_id = $this->Common_model->getRoomidCheck($sender_id,$receiver_id,$type);
-		$suc = array('data' =>array('status' => '1', 'msg' =>'Room Id ','room_id'=>$get_room_id));
+		$suc = array('data' =>array('status' => '1', 'message' =>'Room Id ','room_id'=>$get_room_id));
         echo json_encode($suc); exit; 	  
 	}
 	
@@ -4167,15 +4076,15 @@ class App extends CI_Controller {
 	  	$type		     =	$this->test_input($this->input->post('type'));
 
 		if(empty($sender_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter sender id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter sender id.'));
 			echo json_encode($err); exit;
 		} 
 		if(empty($receiver_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter receiver id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter receiver id.'));
 			echo json_encode($err); exit;
 		}  
 		if(empty($type)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter type.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter type.'));
 			echo json_encode($err); exit;
 		} 
   
@@ -4264,7 +4173,7 @@ class App extends CI_Controller {
 		    $sender_record['receiver_name'] =$r_p['full_name'];
 		    $sender_record['receiver_image'] =$r_p['profile_pic'];
 		        
-			$suc = array('data' =>array('status' => '1', 'msg' =>'Message send successfully', 'room_id'=>$get_room_id, 'detail'=>$sender_record));
+			$suc = array('data' =>array('status' => '1', 'message' =>'Message send successfully', 'room_id'=>$get_room_id, 'detail'=>$sender_record));
             echo json_encode($suc); exit; 	  
 	}
 
@@ -4276,15 +4185,15 @@ class App extends CI_Controller {
 	  	$type		    =	$this->test_input($this->input->post('type'));
 
 		if(empty($sender_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter sender id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter sender id.'));
 			echo json_encode($err); exit;
 		} 
 		if(empty($room_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter room id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter room id.'));
 			echo json_encode($err); exit;
 		}  
 		if(empty($type)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter type.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter type.'));
 			echo json_encode($err); exit;
 		} 
 
@@ -4337,7 +4246,7 @@ class App extends CI_Controller {
 	    		} 
 		    }  
 		    
-		$suc = array('data' =>array('status' => '1', 'msg' =>'Call rejected successfully'));
+		$suc = array('data' =>array('status' => '1', 'message' =>'Call rejected successfully'));
         echo json_encode($suc); exit; 	  
 	}
 
@@ -4350,15 +4259,15 @@ class App extends CI_Controller {
 	  	$type		    =	$this->test_input($this->input->post('type'));
 
 		if(empty($sender_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter sender id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter sender id.'));
 			echo json_encode($err); exit;
 		} 
 		if(empty($room_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter room id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter room id.'));
 			echo json_encode($err); exit;
 		}  
 		if(empty($type)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter type.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter type.'));
 			echo json_encode($err); exit;
 		} 
 
@@ -4452,7 +4361,7 @@ class App extends CI_Controller {
 
 	    // $this->Common_model->addEditRecords('users_chat',$update_data, array('room_id' => $room_id)); 
 		    // die;
-		$suc = array('data' =>array('status' => '1', 'msg' =>'Call ended successfully'));
+		$suc = array('data' =>array('status' => '1', 'message' =>'Call ended successfully'));
         echo json_encode($suc); exit; 	  
 	}
 	
@@ -4465,20 +4374,20 @@ class App extends CI_Controller {
 	  	$repeat		     =	$this->test_input($this->input->post('repeat'));
 
 		if(empty($sender_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter sender id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter sender id.'));
 			echo json_encode($err); exit;
 		} 
 		if(empty($receiver_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter receiver id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter receiver id.'));
 			echo json_encode($err); exit;
 		}  
 		if(empty($type)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter type.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter type.'));
 			echo json_encode($err); exit;
 		} 
    
 	/*	if(empty($message)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter message.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter message.'));
 			echo json_encode($err); exit;
 		} */
 			
@@ -4491,16 +4400,16 @@ class App extends CI_Controller {
 			if(!empty($type)){
 
 				if($this->language=='english'){
-					$err = array('data' =>array('status' => '0', 'msg' => 'User on other call.'));
+					$err = array('data' =>array('status' => '0', 'message' => 'User on other call.'));
 				}elseif ($this->language=='arabic') {
-					$err = array('data' =>array('status' => '0', 'msg' => 'المستخدم مختلف'));
+					$err = array('data' =>array('status' => '0', 'message' => 'المستخدم مختلف'));
 
 				}elseif ($this->language=='french') {
-					$err = array('data' =>array('status' => '0', 'msg' => 'L\'utilisateur est dans un autre appel'));
+					$err = array('data' =>array('status' => '0', 'message' => 'L\'utilisateur est dans un autre appel'));
 
 				}
 
-				// $err = array('data' =>array('status' => '0', 'msg' => $user_details['full_name'].' on other call.'));
+				// $err = array('data' =>array('status' => '0', 'message' => $user_details['full_name'].' on other call.'));
 
 
 				echo json_encode($err); exit;
@@ -4614,7 +4523,7 @@ class App extends CI_Controller {
 		    $sender_record['receiver_name'] =$r_p['full_name'];
 		    $sender_record['receiver_image'] =$r_p['profile_pic'];
 		        
-			$suc = array('data' =>array('status' => '1', 'msg' =>'Message send successfully', 'room_id'=>$get_room_id, 'detail'=>$sender_record));
+			$suc = array('data' =>array('status' => '1', 'message' =>'Message send successfully', 'room_id'=>$get_room_id, 'detail'=>$sender_record));
             echo json_encode($suc); exit; 	  
 	}
 
@@ -4626,7 +4535,7 @@ class App extends CI_Controller {
 	  	$room_id		 =	$this->test_input($this->input->post('room_id'));
 	 
 		if(empty($room_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter room id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter room id.'));
 			echo json_encode($err); exit;
 		} 
 		$chat_record=$this->Common_model->getRecords('users_chat','*',array('room_id'=>$room_id,'type'=>'chat','message!='=>''),'',false);	
@@ -4662,7 +4571,7 @@ class App extends CI_Controller {
 		$user_id =	$this->test_input($this->input->post('user_id'));
 
 	  	if(empty($user_id)){
-			$err = array('data' =>array('status' => '0', 'msg' => 'Please enter user_id.'));
+			$err = array('data' =>array('status' => '0', 'message' => 'Please enter user_id.'));
 			echo json_encode($err); exit;
 		} 
 		$this->check_login();
@@ -4756,10 +4665,10 @@ class App extends CI_Controller {
 	    		$new_array =array();
 	    	}
 
-			$suc = array('data' =>array('status' => '1', 'msg' =>'message', 'details'=>$new_array));
+			$suc = array('data' =>array('status' => '1', 'message' =>'message', 'details'=>$new_array));
             echo json_encode($suc); exit;
 		} else {
-			$err = array('data' =>array('status' => '0', 'msg' => 'No Data Found'));
+			$err = array('data' =>array('status' => '0', 'message' => 'No Data Found'));
             echo json_encode($err); exit;
 		} 
 
@@ -4836,7 +4745,7 @@ class App extends CI_Controller {
         $user_id   =	$this->test_input($this->input->post('user_id'));
        
 		if(empty($user_id )) {
-			$err = array('data'=> array('status'=>'0','msg'=>'Please enter user_id.'));
+			$err = array('data'=> array('status'=>'0','message'=>'Please enter user_id.'));
 			echo json_encode($err);exit;
 		}
 			$where = array('user_id' => $user_id);
@@ -4850,7 +4759,7 @@ class App extends CI_Controller {
 		    		if(!empty($code)){
 
 		    			if($this->Common_model->addEditRecords('users',array('token'=>$code),array('user_id'=>$res['user_id']))) {
-		    				$err = array('data'=> array('status'=>'2','msg'=>'Verification code has been sent to your phone number.')) ;
+		    				$err = array('data'=> array('status'=>'2','message'=>'Verification code has been sent to your phone number.')) ;
 							echo json_encode($err);
 							exit;
 		    			}
@@ -4858,10 +4767,8 @@ class App extends CI_Controller {
 		    	}
 	    		
 	    	}else{
-
-	    		$err = array('data'=> array('status'=>'2','msg'=>'Already Verified.')) ;
+	    		$err = array('data'=> array('status'=>'2','message'=>'Already Verified.')) ;
 				echo json_encode($err);
-
 	    	}
 	} 
 

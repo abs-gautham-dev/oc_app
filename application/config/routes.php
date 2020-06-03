@@ -203,3 +203,17 @@ $route['term_and_condition'] 		= 'Welcome/term_and_condition';
 
 
 
+// Sales
+$route['sales/dashboard'] 		= 'Sales/index';
+$route['sales/create_order'] 		= 'Sales/create_order';
+$route['sales/order-list'] 		= 'Sales/order_list';
+
+// Company
+$route['company/order-list'] 		= 'Company/order_list';
+$route['company/send_job_request/(:num)'] 		= 'Company/send_job_request/$1';
+$route['company/send_job_request'] 		= 'Company/send_job_request';
+
+
+
+
+
