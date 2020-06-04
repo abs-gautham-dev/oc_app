@@ -1,18 +1,3 @@
-<div class="bredcum">
-  <div class="container">
-    <div class="col-md-6">
-      <ul class="breadcrumb">
-        <li><a href="#" class="page-name">Login</a></li>
-      </ul>
-    </div>
-  <div class="col-md-6">
-    <ul class="breadcrumb">
-    <li><a href="#">Home</a></li>
-    <li><a href="#">Login</a></li>
-    </ul>
-  </div>
-  </div>
-</div>
 <section class="main-section">
   <div class="container">
     
@@ -59,12 +44,24 @@
             dataType:'json',   
             success: function(data){
                 if(data.data.status==2){
-                    alert('login done');
+                    if(data.data.user_type=="Sales"){
+                        window.location.href = "<?php echo base_url('sales/dashboard') ?>";
+                   }else if(data.data.user_type=="Companies"){
+                      window.location.href = "<?php echo base_url('company/order-list') ?>";
+                   }else if(data.data.user_type=="Inspectors"){
+                      window.location.href = "<?php echo base_url('Companies') ?>";
+                   }
                 }else{
-                  alert(data.data.msg);
+                  //alert(data.data.msg);
                     $("#message_show").html(data.data.msg);
                     if(data.data.status==1){
-                          //setTimeout(function() { location.reload();}, 2000);
+                         if(data.data.user_type=="Sales"){
+                              window.location.href = "<?php echo base_url('sales/order-list') ?>";
+                         }else if(data.data.user_type=="Companies"){
+                            window.location.href = "<?php echo base_url('company/order-list') ?>";
+                         }else if(data.data.user_type=="Inspectors"){
+                            window.location.href = "<?php echo base_url('Companies') ?>";
+                         }
                     }
                 }
             }

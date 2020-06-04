@@ -35,6 +35,10 @@
             <a href="#about">About us</a>
             <a href="#about">Contact us</a>
             <div class="dropdown">
+     <?php if($this->session->userdata('user_id')){ ?>         
+      <a href="<?php echo base_url('welcome/logout') ?>" class="btn btn-primary dropdown-toggle">
+    <span class="fa fa-sign-out"></span>Logout</a>
+     <?php }else{ ?>
     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Login As
     <span class="caret"></span></button>
     <ul class="dropdown-menu">
@@ -42,6 +46,7 @@
       <li><a href="#">2</a></li>
       <li><a href="#">3</a></li>
     </ul>
+     <?php } ?>
   </div>
             <a href="javascript:void(0);" class="icon" onclick="myFunction()">
             <i class="fa fa-bars"></i>

@@ -1,6 +1,7 @@
 .DS_Store
 
 application/cache/*
+application/confing/config.php
 !application/cache/index.html
 !application/cache/.htaccess
 

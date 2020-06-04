@@ -53,9 +53,9 @@ class Sales extends CI_Controller {
 	//	$user_data = $this->Common_model->getRecords('users','*',array('user_id'=>$id),'',true);
 	
 
-		$this->load->view('frontend/header',$data);
-		$this->load->view('frontend/sales_dashboard');
-		$this->load->view('frontend/footer');
+		$this->load->view('frontend/include/header',$data);
+		$this->load->view('frontend/sales/sales_dashboard');
+		$this->load->view('frontend/include/footer');
 	}
 
 

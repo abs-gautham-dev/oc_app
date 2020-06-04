@@ -1,21 +1,7 @@
-<div class="bredcum">
-  <div class="container">
-    <div class="col-md-6">
-      <ul class="breadcrumb">
-        <li><a href="#" class="page-name">Registration</a></li>
-      </ul>
-    </div>
-  <div class="col-md-6">
-    <ul class="breadcrumb">
-    <li><a href="#">Home</a></li>
-    <li><a href="#">Registration</a></li>
-    </ul>
-  </div>
-  </div>
-</div>
+
 <section class="main-section">
   <div class="container">
-    
+    <span class="success_new"></span>
       <div class="col-xs-12 col-md-12">
       <div class="login-page registration">
       <ul class="nav nav-tabs">
@@ -26,7 +12,6 @@
   </ul>
 
   <div class="tab-content">
-    <span class="success_new"></span>
     <div id="home" class="tab-pane fade in active">
       
       <form class="" id="form" method="POST" action="<?php echo $from_action; ?>" enctype="multipart/form-data" role="form"  data-parsley-validate>
@@ -327,8 +312,7 @@ function submit_form(id){
                 if(data.data.status==2){
                     $("#user_id").val(data.data.user_id);
                    jQuery("#exampleModal").modal('show');
-                   alert(data.data.msg);
-                   jQuery(".success_new").html(data.data.msg);
+                   jQuery("#message_show").html(data.data.msg);
                 }else{
                     $("#message_show").html(data.data.msg);
                 }

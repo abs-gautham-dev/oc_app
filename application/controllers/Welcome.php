@@ -107,7 +107,7 @@ class Welcome extends CI_Controller {
 						'profile_pic'=>$res['profile_pic'],
 					);
 					$this->session->set_userdata($login_session); 
-					$response = array('data'=> array('status'=>'1','msg'=>'<div class="alert alert-success" id="success-alert">  <button type="button" class="close" data-dismiss="alert">x</button> <strong>'.$this->lang->line('success').'!</strong>'.'</strong>'.$this->lang->line('login_msg').'</div>'));		 
+					$response = array('data'=> array('status'=>'1','msg'=>'<div class="alert alert-success" id="success-alert">  <button type="button" class="close" data-dismiss="alert">x</button> <strong>'.$this->lang->line('success').'!</strong>'.'</strong>'.$this->lang->line('login_msg').'</div>','user_type'=>$res['user_type']));		 
 				  	echo json_encode($response);
 				  	exit;	
 			    } else {
@@ -159,7 +159,7 @@ class Welcome extends CI_Controller {
 					$this->session->set_userdata($login_session); 
 
  
-						$response = array('data'=> array('status'=>'1','msg'=>'<div class="alert alert-success" id="success-alert">  <button type="button" class="close" data-dismiss="alert">x</button> <strong>'.$this->lang->line('success').'!</strong>'.'</strong>'.$this->lang->line('login_msg').'</div>'));		
+						$response = array('data'=> array('status'=>'1','msg'=>'<div class="alert alert-success" id="success-alert">  <button type="button" class="close" data-dismiss="alert">x</button> <strong>'.$this->lang->line('success').'!</strong>'.'</strong>'.$this->lang->line('login_msg').'</div>','user_type'=>$res['user_type']));		
 						 
 					  	echo json_encode($response);
 					  	exit;	
@@ -211,7 +211,7 @@ class Welcome extends CI_Controller {
 								);
 								$this->session->set_userdata($login_session); 
 
-								$response = array('data'=> array('status'=>'1','msg'=>'<div class="alert alert-success" id="success-alert">  <button type="button" class="close" data-dismiss="alert">x</button> <strong>'.$this->lang->line('success').'!</strong>'.'</strong>'.$this->lang->line('login_msg').'</div>'));		
+								$response = array('data'=> array('status'=>'1','msg'=>'<div class="alert alert-success" id="success-alert">  <button type="button" class="close" data-dismiss="alert">x</button> <strong>'.$this->lang->line('success').'!</strong>'.'</strong>'.$this->lang->line('login_msg').'</div>','user_type'=>$res['user_type']));		
 							  	echo json_encode($response);
 							  	exit;	
 						    } else {
@@ -222,9 +222,6 @@ class Welcome extends CI_Controller {
 						}
 						else
 						{
-
-						
-							
 							$err = array('data' =>array('status' => '0', 'msg' =>'<div class="alert alert-danger" id="success-alert">  <button type="button" class="close" data-dismiss="alert">x</button> <strong>'.$this->lang->line('error').'</strong>'.$this->lang->line('worng_password').'</div>'));
 							echo json_encode($err);exit;
 						}
@@ -234,6 +231,7 @@ class Welcome extends CI_Controller {
 		}
  
 		$this->load->view('frontend/include/header',$data);
+		$this->load->view('frontend/include/breadcrumb');
 		$this->load->view('frontend/login');
 		$this->load->view('frontend/include/footer');
 	}
@@ -458,6 +456,7 @@ class Welcome extends CI_Controller {
 		}
 
 		$this->load->view('frontend/include/header',$data);
+		$this->load->view('frontend/include/breadcrumb');
 		$this->load->view('frontend/register');
 		$this->load->view('frontend/include/footer');
 	}
